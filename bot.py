@@ -17,7 +17,6 @@ from telegram.ext import (
 
 # ============================================================
 # NEURALSEARCH
-# Public OSINT Search Bot
 # ============================================================
 
 logging.basicConfig(
@@ -29,7 +28,7 @@ TOKEN = os.getenv("BOT_TOKEN")
 PORT = int(os.getenv("PORT", "10000"))
 
 # ============================================================
-# RENDER WEB SERVER
+# RENDER
 # ============================================================
 
 web_app = Flask(__name__)
@@ -83,7 +82,7 @@ SITES = {
 
 
 # ============================================================
-# MAIN MENU
+# MENU
 # ============================================================
 
 def main_menu():
@@ -136,15 +135,15 @@ async def start(
         "━━━━━━━━━━━━━━━━━━━━\n\n"
         "🔍 PUBLIC DATA SEARCH\n\n"
         "👤 USERNAME — поиск публичных профилей\n"
-        "🌐 DOMAIN — DNS / инфраструктура\n"
         "🌍 IP — информация об IP\n"
+        "🌐 DOMAIN — DNS / инфраструктура\n"
         "🔗 URL — анализ веб-страницы\n\n"
         "━━━━━━━━━━━━━━━━━━━━\n"
         "🚀 QUICK SEARCH\n"
         "━━━━━━━━━━━━━━━━━━━━\n\n"
-        "/search @username\n"
-        "/search example.com\n"
+        "/search @Username\n"
         "/search 8.8.8.8\n"
+        "/search example.com\n"
         "/search https://example.com\n\n"
         "━━━━━━━━━━━━━━━━━━━━\n"
         "🛡 NEURALSEARCH CORE\n"
@@ -178,33 +177,31 @@ async def buttons(
 
         await query.message.reply_text(
             "👤 USERNAME SEARCH\n\n"
-            "Введи username:\n\n"
-            "/search @username\n\n"
-            "Пример:\n"
-            "/search @octocat"
+            "Готовая команда:\n\n"
+            "/search @Username"
         )
 
     elif query.data == "ip":
 
         await query.message.reply_text(
-            "🌍 IP INTELLIGENCE\n\n"
-            "Введи IP:\n\n"
+            "🌍 IP SEARCH\n\n"
+            "Готовая команда:\n\n"
             "/search 8.8.8.8"
         )
 
     elif query.data == "domain":
 
         await query.message.reply_text(
-            "🌐 DOMAIN INTELLIGENCE\n\n"
-            "Введи домен:\n\n"
+            "🌐 DOMAIN SEARCH\n\n"
+            "Готовая команда:\n\n"
             "/search example.com"
         )
 
     elif query.data == "url":
 
         await query.message.reply_text(
-            "🔗 URL ANALYSIS\n\n"
-            "Введи URL:\n\n"
+            "🔗 URL SEARCH\n\n"
+            "Готовая команда:\n\n"
             "/search https://example.com"
         )
 
@@ -212,10 +209,10 @@ async def buttons(
 
         await query.message.reply_text(
             "🧠 NEURALSEARCH\n\n"
-            "Public Intelligence Engine.\n\n"
-            "⚡ Быстрый поиск\n"
-            "🌐 Открытые источники\n"
-            "🔎 Анализ публичных данных\n\n"
+            "PUBLIC INTELLIGENCE ENGINE\n\n"
+            "⚡ Fast Search\n"
+            "🌐 Public Sources\n"
+            "🔎 Data Analysis\n\n"
             "🛡 Только публичная информация.\n"
             "Приватные данные, закрытые аккаунты\n"
             "и слитые базы не используются."
@@ -251,10 +248,7 @@ def extract_public_contacts(html):
         text,
     )
 
-    # --------------------------------------------------------
     # EMAIL
-    # --------------------------------------------------------
-
     email_pattern = (
         r"\b[A-Za-z0-9._%+-]+"
         r"@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"
@@ -282,10 +276,7 @@ def extract_public_contacts(html):
         if email not in ignored_emails:
             emails.add(email)
 
-    # --------------------------------------------------------
     # PHONE
-    # --------------------------------------------------------
-
     phone_pattern = (
         r"(?<![\d.])"
         r"(?:\+\d{1,3}[\s().-]*)?"
@@ -309,7 +300,6 @@ def extract_public_contacts(html):
         if not 8 <= len(digits) <= 15:
             continue
 
-        # Не принимаем IP.
         try:
 
             ipaddress.ip_address(
@@ -319,10 +309,8 @@ def extract_public_contacts(html):
             continue
 
         except ValueError:
-
             pass
 
-        # Не принимаем координаты.
         if (
             "." in phone
             and "+" not in phone
@@ -331,21 +319,18 @@ def extract_public_contacts(html):
         ):
             continue
 
-        # Не принимаем даты.
         if re.fullmatch(
             r"\d{1,4}[-/.]\d{1,2}[-/.]\d{1,4}",
             phone,
         ):
             continue
 
-        # Не принимаем длинные технические числа.
         if re.fullmatch(
             r"\d{12,}",
             digits,
         ):
             continue
 
-        # Нужен телефонный формат.
         if (
             "+" not in phone
             and not re.search(
@@ -461,9 +446,9 @@ async def username_search(
 
     progress = await update.message.reply_text(
         f"⚡ NEURALSEARCH\n\n"
-        f"👤 Target: @{username}\n\n"
-        f"🌐 Sources: {len(SITES)}\n"
-        "🔎 Scanning public sources...\n\n"
+        f"👤 TARGET: @{username}\n\n"
+        f"🌐 SOURCES: {len(SITES)}\n"
+        "🔎 SCANNING PUBLIC SOURCES...\n\n"
         "STATUS: 🟡 PROCESSING"
     )
 
@@ -477,7 +462,6 @@ async def username_search(
 
     results = []
 
-    # Все источники проверяются одновременно.
     with ThreadPoolExecutor(
         max_workers=21,
     ) as executor:
@@ -523,10 +507,6 @@ async def username_search(
             result["phones"]
         )
 
-    # ========================================================
-    # REPORT
-    # ========================================================
-
     text = (
         "⚡ NEURALSEARCH REPORT\n\n"
         "━━━━━━━━━━━━━━━━━━━━\n"
@@ -536,10 +516,6 @@ async def username_search(
         f"Sources checked: {len(results)}\n"
         f"Profiles found: {len(found)}\n"
         f"Restricted: {len(blocked)}\n\n"
-    )
-
-    # Profiles.
-    text += (
         "🌐 PUBLIC PROFILES\n\n"
     )
 
@@ -561,7 +537,6 @@ async def username_search(
             "No public profiles found.\n\n"
         )
 
-    # Emails.
     text += (
         "📧 PUBLIC EMAILS\n\n"
     )
@@ -570,9 +545,7 @@ async def username_search(
 
         for email in sorted(emails):
 
-            text += (
-                f"• {email}\n"
-            )
+            text += f"• {email}\n"
 
     else:
 
@@ -580,20 +553,15 @@ async def username_search(
             "No public emails found.\n"
         )
 
-    text += "\n"
-
-    # Phones.
     text += (
-        "📞 PUBLIC PHONES\n\n"
+        "\n📞 PUBLIC PHONES\n\n"
     )
 
     if phones:
 
         for phone in sorted(phones):
 
-            text += (
-                f"• {phone}\n"
-            )
+            text += f"• {phone}\n"
 
     else:
 
@@ -666,7 +634,7 @@ def dns_lookup(
 
 
 # ============================================================
-# IP
+# IP SEARCH
 # ============================================================
 
 async def ip_search(
@@ -880,9 +848,9 @@ async def search(
         await update.message.reply_text(
             "⚡ NEURALSEARCH\n\n"
             "Использование:\n\n"
-            "/search @username\n"
-            "/search example.com\n"
+            "/search @Username\n"
             "/search 8.8.8.8\n"
+            "/search example.com\n"
             "/search https://example.com"
         )
 
@@ -908,7 +876,6 @@ async def search(
         return
 
     except ValueError:
-
         pass
 
     # URL.
@@ -955,7 +922,6 @@ def main():
             "BOT_TOKEN is not configured."
         )
 
-    # Render web server.
     threading.Thread(
         target=run_web,
         daemon=True,
@@ -996,5 +962,4 @@ def main():
 
 
 if __name__ == "__main__":
-
     main()
