@@ -14,7 +14,8 @@ from telegram.ext import (
 
 logging.basicConfig(level=logging.INFO)
 
-TOKEN = os.getenv("BOT_TOKEN")
+TOKEN = os.getenv(8018383562:AAH8e5T49aBjx1eEvAzadep0Sp2QqqhZ754
+)
 
 
 def dns_lookup(domain, record_type):
