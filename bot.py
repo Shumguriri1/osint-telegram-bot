@@ -4,6 +4,7 @@ import ipaddress
 import logging
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from urllib.parse import urlparse
 
 import requests
 from flask import Flask
@@ -57,9 +58,7 @@ SITES = {
     "VK": "https://vk.com/{u}",
     "Steam": "https://steamcommunity.com/id/{u}",
     "Twitch": "https://www.twitch.tv/{u}",
-    "Roblox": "https://www.roblox.com/user.aspx?username={u}",
     "Pinterest": "https://www.pinterest.com/{u}/",
-    "Tumblr": "https://{u}.tumblr.com/",
     "Medium": "https://medium.com/@{u}",
     "YouTube": "https://www.youtube.com/@{u}",
     "SoundCloud": "https://soundcloud.com/{u}",
@@ -87,10 +86,11 @@ def main_menu():
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
     await update.message.reply_text(
         "🔎 OSINT SEARCH\n\n"
-        "Поиск информации из открытых источников.\n\n"
-        "Попробуй:\n"
+        "Поиск публичной информации.\n\n"
+        "Примеры:\n"
         "/search 8.8.8.8\n"
         "/search example.com\n"
         "/search octocat\n"
@@ -100,138 +100,361 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
     query = update.callback_query
     await query.answer()
 
-    messages = {
-        "username": "👤 Username\n\nПример:\n/search octocat",
-        "domain": "🌐 Domain\n\nПример:\n/search example.com",
-        "ip": "🌍 IP\n\nПример:\n/search 8.8.8.8",
-        "url": "🔗 URL\n\nПример:\n/search https://example.com",
-        "help": (
+    if query.data == "username":
+
+        await query.message.reply_text(
+            "👤 USERNAME\n\n"
+            "Пример:\n"
+            "/search octocat"
+        )
+
+    elif query.data == "domain":
+
+        await query.message.reply_text(
+            "🌐 DOMAIN\n\n"
+            "Пример:\n"
+            "/search example.com"
+        )
+
+    elif query.data == "ip":
+
+        await query.message.reply_text(
+            "🌍 IP\n\n"
+            "Пример:\n"
+            "/search 8.8.8.8"
+        )
+
+    elif query.data == "url":
+
+        await query.message.reply_text(
+            "🔗 URL\n\n"
+            "Пример:\n"
+            "/search https://example.com"
+        )
+
+    elif query.data == "help":
+
+        await query.message.reply_text(
             "ℹ️ ПОМОЩЬ\n\n"
-            "Бот проверяет только публичные источники.\n\n"
-            "⚠️ Совпадение username не доказывает, "
+            "Бот работает с публичной информацией.\n\n"
+            "Он не получает приватные данные "
+            "и не использует закрытые базы.\n\n"
+            "Совпадение username не означает, "
             "что аккаунты принадлежат одному человеку."
-        ),
-    }
-
-    await query.message.reply_text(
-        messages.get(query.data, "Неизвестная команда.")
-    )
+        )
 
 
-def check_site(item):
+def extract_contacts(html):
+
+    emails = set()
+    phones = set()
+    links = set()
+
+    # Email
+
+    email_pattern = r"""
+        [A-Za-z0-9._%+-]+
+        @
+        [A-Za-z0-9.-]+\.[A-Za-z]{2,}
+    """
+
+    for match in re.findall(
+        email_pattern,
+        html,
+        re.VERBOSE
+    ):
+
+        emails.add(match.lower())
+
+    # Телефонные номера.
+
+    phone_pattern = r"""
+        (?<!\d)
+        (?:\+\d{1,3}[\s.-]?)?
+        (?:\(?\d{2,4}\)?[\s.-]?)
+        \d{2,4}[\s.-]
+        \d{2,4}[\s.-]?
+        \d{0,4}
+        (?!\d)
+    """
+
+    for match in re.findall(
+        phone_pattern,
+        html,
+        re.VERBOSE
+    ):
+
+        cleaned = re.sub(
+            r"\s+",
+            " ",
+            match
+        ).strip()
+
+        digits = re.sub(
+            r"\D",
+            "",
+            cleaned
+        )
+
+        if 7 <= len(digits) <= 15:
+
+            phones.add(cleaned)
+
+    # URL
+
+    url_pattern = r'https?://[^\s"\'<>]+'
+
+    for match in re.findall(
+        url_pattern,
+        html
+    ):
+
+        links.add(match.rstrip(").,;"))
+
+    return emails, phones, links
+
+
+def check_profile(item):
+
     name, url = item
 
     try:
+
         response = requests.get(
             url,
             timeout=8,
-            allow_redirects=False,
+            allow_redirects=True,
             headers={
-                "User-Agent": "Mozilla/5.0 OSINT-Bot"
+                "User-Agent":
+                "Mozilla/5.0 (compatible; OSINTBot/1.0)"
             },
         )
 
         status = response.status_code
 
-        if status == 200:
-            return name, url, "found", None
+        if status != 200:
 
-        if status == 404:
-            return name, url, "not_found", None
+            return {
+                "name": name,
+                "url": url,
+                "status": "blocked"
+                if status in (401, 403, 429)
+                else "not_found",
+                "emails": set(),
+                "phones": set(),
+                "links": set(),
+            }
 
-        if status in (401, 403, 429):
-            return name, url, "blocked", status
+        emails, phones, links = extract_contacts(
+            response.text
+        )
 
-        if 300 <= status < 400:
-            return name, url, "blocked", status
-
-        return name, url, "unknown", status
+        return {
+            "name": name,
+            "url": response.url,
+            "status": "found",
+            "emails": emails,
+            "phones": phones,
+            "links": links,
+        }
 
     except requests.RequestException:
-        return name, url, "error", None
+
+        return {
+            "name": name,
+            "url": url,
+            "status": "error",
+            "emails": set(),
+            "phones": set(),
+            "links": set(),
+        }
 
 
 async def username_search(update, username):
+
     username = username.lstrip("@").strip()
 
-    if not re.match(r"^[a-zA-Z0-9._-]{2,64}$", username):
+    if not re.match(
+        r"^[a-zA-Z0-9._-]{2,64}$",
+        username
+    ):
+
         await update.message.reply_text(
-            "❌ Username содержит недопустимые символы."
+            "❌ Недопустимый username."
         )
+
         return
 
     await update.message.reply_text(
-        f"🔎 Проверяю @{username}\n\n"
-        f"Сайтов: {len(SITES)}\n"
-        "Подожди..."
+        f"🔎 Начинаю публичный OSINT-поиск\n\n"
+        f"Username: @{username}\n\n"
+        f"Проверяю {len(SITES)} источников..."
     )
 
     items = [
-        (name, url.format(u=username))
+        (
+            name,
+            url.format(u=username)
+        )
         for name, url in SITES.items()
     ]
 
     results = []
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(
+        max_workers=10
+    ) as executor:
+
         futures = [
-            executor.submit(check_site, item)
+            executor.submit(
+                check_profile,
+                item
+            )
             for item in items
         ]
 
         for future in as_completed(futures):
-            results.append(future.result())
 
-    found = [r for r in results if r[2] == "found"]
-    not_found = [r for r in results if r[2] == "not_found"]
-    problems = [
+            results.append(
+                future.result()
+            )
+
+    found = [
         r for r in results
-        if r[2] in ("blocked", "error", "unknown")
+        if r["status"] == "found"
     ]
 
-    found.sort()
-    not_found.sort()
-    problems.sort()
+    blocked = [
+        r for r in results
+        if r["status"] in (
+            "blocked",
+            "error"
+        )
+    ]
+
+    emails = set()
+    phones = set()
+    links = set()
+
+    for result in found:
+
+        emails.update(
+            result["emails"]
+        )
+
+        phones.update(
+            result["phones"]
+        )
+
+        links.update(
+            result["links"]
+        )
 
     text = (
-        "👤 USERNAME SEARCH\n\n"
-        f"Username: @{username}\n\n"
-        f"📊 Проверено: {len(results)}\n"
-        f"✅ Найдено: {len(found)}\n"
-        f"❌ Не найдено: {len(not_found)}\n"
-        f"⚠️ Не удалось проверить: {len(problems)}\n\n"
+        "🔎 PUBLIC OSINT REPORT\n\n"
+        f"👤 Username: @{username}\n\n"
+        "📊 РЕЗУЛЬТАТ\n"
+        f"Проверено: {len(results)}\n"
+        f"Публичных страниц: {len(found)}\n"
+        f"Не удалось проверить: {len(blocked)}\n\n"
     )
 
     if found:
-        text += "✅ НАЙДЕНО\n\n"
 
-        for name, url, _, _ in found:
-            text += f"• {name}\n{url}\n\n"
+        text += "🌐 ПРОФИЛИ\n\n"
 
-    if problems:
-        text += "⚠️ НЕ ПОДТВЕРЖДЕНО\n\n"
+        for result in sorted(
+            found,
+            key=lambda x: x["name"]
+        ):
 
-        for name, _, status, code in problems:
-            if code:
-                text += f"• {name} — HTTP {code}\n"
-            else:
-                text += f"• {name} — ошибка проверки\n"
+            text += (
+                f"✅ {result['name']}\n"
+                f"{result['url']}\n\n"
+            )
+
+    if emails:
+
+        text += "📧 ПУБЛИЧНЫЕ EMAIL\n\n"
+
+        for email in sorted(emails):
+
+            text += (
+                f"• {email}\n"
+            )
 
         text += "\n"
 
+    if phones:
+
+        text += "📞 ПУБЛИЧНЫЕ ТЕЛЕФОНЫ\n\n"
+
+        for phone in sorted(phones):
+
+            text += (
+                f"• {phone}\n"
+            )
+
+        text += "\n"
+
+    if links:
+
+        # Оставляем только несколько уникальных
+        # ссылок, чтобы Telegram-сообщение
+        # не стало слишком большим.
+
+        useful_links = []
+
+        for link in sorted(links):
+
+            if link not in useful_links:
+
+                useful_links.append(link)
+
+            if len(useful_links) >= 10:
+                break
+
+        text += "🔗 ССЫЛКИ\n\n"
+
+        for link in useful_links:
+
+            text += (
+                f"• {link}\n"
+            )
+
+        text += "\n"
+
+    if not emails:
+
+        text += (
+            "📧 Публичный email: не найден\n\n"
+        )
+
+    if not phones:
+
+        text += (
+            "📞 Публичный телефон: не найден\n\n"
+        )
+
     text += (
-        "⚠️ Наличие одинакового username "
-        "на разных сайтах не подтверждает "
-        "принадлежность аккаунтов одному человеку."
+        "⚠️ ВАЖНО\n\n"
+        "Показанные контакты относятся только "
+        "к публично доступному содержимому страниц. "
+        "Совпадение username не подтверждает "
+        "личность владельца аккаунта."
     )
 
-    await update.message.reply_text(text[:4000])
+    await update.message.reply_text(
+        text[:4000]
+    )
 
 
 def dns_lookup(domain, record_type):
+
     response = requests.get(
         "https://cloudflare-dns.com/dns-query",
         params={
@@ -255,7 +478,9 @@ def dns_lookup(domain, record_type):
 
 
 async def ip_search(update, ip):
+
     try:
+
         response = requests.get(
             f"https://ipinfo.io/{ip}/json",
             timeout=10
@@ -277,24 +502,44 @@ async def ip_search(update, ip):
             f"Location: {data.get('loc', '—')}"
         )
 
-        await update.message.reply_text(result)
+        await update.message.reply_text(
+            result
+        )
 
     except Exception as error:
+
         logging.error(error)
+
         await update.message.reply_text(
             "❌ Не удалось получить информацию об IP."
         )
 
 
+def is_domain(value):
+
+    pattern = (
+        r"^(?=.{1,253}$)"
+        r"([a-zA-Z0-9]"
+        r"(?:[a-zA-Z0-9-]{0,61}"
+        r"[a-zA-Z0-9])?\.)+"
+        r"[a-zA-Z]{2,}$"
+    )
+
+    return bool(
+        re.match(pattern, value)
+    )
+
+
 async def domain_search(update, domain):
+
     domain = domain.lower().strip()
 
     try:
+
         a = dns_lookup(domain, "A")
         aaaa = dns_lookup(domain, "AAAA")
         mx = dns_lookup(domain, "MX")
         ns = dns_lookup(domain, "NS")
-        txt = dns_lookup(domain, "TXT")
 
         result = (
             "🌐 DOMAIN INFORMATION\n\n"
@@ -306,29 +551,38 @@ async def domain_search(update, domain):
             f"🔹 MX:\n"
             f"{chr(10).join(mx) if mx else '—'}\n\n"
             f"🔹 NS:\n"
-            f"{chr(10).join(ns) if ns else '—'}\n\n"
-            f"🔹 TXT:\n"
-            f"{chr(10).join(txt) if txt else '—'}"
+            f"{chr(10).join(ns) if ns else '—'}"
         )
 
-        await update.message.reply_text(result[:4000])
+        await update.message.reply_text(
+            result[:4000]
+        )
 
     except Exception as error:
+
         logging.error(error)
+
         await update.message.reply_text(
             "❌ Не удалось получить DNS-информацию."
         )
 
 
 async def url_search(update, url):
+
     try:
+
         response = requests.get(
             url,
             timeout=10,
             allow_redirects=True,
             headers={
-                "User-Agent": "Mozilla/5.0 OSINT-Bot"
+                "User-Agent":
+                "Mozilla/5.0 OSINT-Bot"
             }
+        )
+
+        emails, phones, links = extract_contacts(
+            response.text
         )
 
         result = (
@@ -336,70 +590,94 @@ async def url_search(update, url):
             f"URL: {url}\n"
             f"Final URL: {response.url}\n"
             f"Status: {response.status_code}\n"
-            f"Server: {response.headers.get('Server', '—')}\n"
+            f"Server: "
+            f"{response.headers.get('Server', '—')}\n"
             f"Content-Type: "
-            f"{response.headers.get('Content-Type', '—')}"
+            f"{response.headers.get('Content-Type', '—')}\n\n"
+            "📧 Public email:\n"
+            f"{chr(10).join(sorted(emails)) if emails else '—'}\n\n"
+            "📞 Public phone:\n"
+            f"{chr(10).join(sorted(phones)) if phones else '—'}"
         )
 
-        await update.message.reply_text(result)
+        await update.message.reply_text(
+            result[:4000]
+        )
 
     except Exception as error:
+
         logging.error(error)
+
         await update.message.reply_text(
             "❌ Не удалось проанализировать URL."
         )
 
 
-def is_domain(value):
-    pattern = (
-        r"^(?=.{1,253}$)"
-        r"([a-zA-Z0-9]"
-        r"(?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+"
-        r"[a-zA-Z]{2,}$"
-    )
+async def search(update, context):
 
-    return bool(re.match(pattern, value))
-
-
-async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
+
         await update.message.reply_text(
-            "🔎 Пример:\n\n"
+            "🔎 Использование:\n\n"
             "/search 8.8.8.8\n"
             "/search example.com\n"
             "/search octocat\n"
             "/search https://example.com"
         )
+
         return
 
     target = context.args[0].strip()
 
-    await update.message.reply_text(
-        f"🔎 Анализирую:\n{target}\n\n"
-        "Подожди..."
-    )
-
     try:
+
         ipaddress.ip_address(target)
-        await ip_search(update, target)
+
+        await ip_search(
+            update,
+            target
+        )
+
         return
+
     except ValueError:
+
         pass
 
-    if target.startswith("http://") or target.startswith("https://"):
-        await url_search(update, target)
+    if (
+        target.startswith("http://")
+        or target.startswith("https://")
+    ):
+
+        await url_search(
+            update,
+            target
+        )
+
         return
 
     if is_domain(target):
-        await domain_search(update, target)
+
+        await domain_search(
+            update,
+            target
+        )
+
         return
 
-    await username_search(update, target)
+    await username_search(
+        update,
+        target
+    )
 
 
 def main():
+
     if not TOKEN:
-        raise RuntimeError("BOT_TOKEN не установлен")
+
+        raise RuntimeError(
+            "BOT_TOKEN не установлен"
+        )
 
     threading.Thread(
         target=run_web_server,
@@ -414,15 +692,23 @@ def main():
     )
 
     app.add_handler(
-        CommandHandler("start", start)
+        CommandHandler(
+            "start",
+            start
+        )
     )
 
     app.add_handler(
-        CommandHandler("search", search)
+        CommandHandler(
+            "search",
+            search
+        )
     )
 
     app.add_handler(
-        CallbackQueryHandler(button_handler)
+        CallbackQueryHandler(
+            button_handler
+        )
     )
 
     print("Bot started")
