@@ -15,25 +15,29 @@ from telegram.ext import (
     ContextTypes,
 )
 
-# =========================
-# SETTINGS
-# =========================
+# ============================================================
+# NEURALSEARCH
+# Public OSINT Search Bot
+# ============================================================
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s | %(levelname)s | %(message)s",
+    level=logging.INFO,
+)
 
 TOKEN = os.getenv("BOT_TOKEN")
 PORT = int(os.getenv("PORT", "10000"))
 
-# =========================
+# ============================================================
 # RENDER WEB SERVER
-# =========================
+# ============================================================
 
 web_app = Flask(__name__)
 
 
 @web_app.route("/")
 def home():
-    return "OSINT Search Bot is running."
+    return "NEURALSEARCH // ONLINE"
 
 
 @web_app.route("/health")
@@ -49,9 +53,9 @@ def run_web():
     )
 
 
-# =========================
+# ============================================================
 # PUBLIC SOURCES
-# =========================
+# ============================================================
 
 SITES = {
     "GitHub": "https://github.com/{u}",
@@ -78,27 +82,27 @@ SITES = {
 }
 
 
-# =========================
-# MENU
-# =========================
+# ============================================================
+# MAIN MENU
+# ============================================================
 
-def menu():
+def main_menu():
 
     keyboard = [
         [
             InlineKeyboardButton(
-                "👤 Username",
+                "👤 USERNAME",
                 callback_data="username",
             ),
             InlineKeyboardButton(
-                "🌐 Domain",
-                callback_data="domain",
+                "🌍 IP",
+                callback_data="ip",
             ),
         ],
         [
             InlineKeyboardButton(
-                "🌍 IP",
-                callback_data="ip",
+                "🌐 DOMAIN",
+                callback_data="domain",
             ),
             InlineKeyboardButton(
                 "🔗 URL",
@@ -107,8 +111,8 @@ def menu():
         ],
         [
             InlineKeyboardButton(
-                "ℹ️ Help",
-                callback_data="help",
+                "🧠 ABOUT",
+                callback_data="about",
             ),
         ],
     ]
@@ -116,29 +120,55 @@ def menu():
     return InlineKeyboardMarkup(keyboard)
 
 
-# =========================
+# ============================================================
 # START
-# =========================
+# ============================================================
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+):
 
-    await update.message.reply_text(
-        "🔎 OSINT SEARCH v4\n\n"
-        "Поиск информации из публичных источников.\n\n"
-        "Команды:\n\n"
+    text = (
+        "⚡ NEURALSEARCH\n\n"
+        "━━━━━━━━━━━━━━━━━━━━\n"
+        "🧠 INTELLIGENCE ENGINE\n"
+        "━━━━━━━━━━━━━━━━━━━━\n\n"
+        "🔍 PUBLIC DATA SEARCH\n\n"
+        "👤 USERNAME — поиск публичных профилей\n"
+        "🌐 DOMAIN — DNS / инфраструктура\n"
+        "🌍 IP — информация об IP\n"
+        "🔗 URL — анализ веб-страницы\n\n"
+        "━━━━━━━━━━━━━━━━━━━━\n"
+        "🚀 QUICK SEARCH\n"
+        "━━━━━━━━━━━━━━━━━━━━\n\n"
         "/search @username\n"
         "/search example.com\n"
         "/search 8.8.8.8\n"
-        "/search https://example.com",
-        reply_markup=menu(),
+        "/search https://example.com\n\n"
+        "━━━━━━━━━━━━━━━━━━━━\n"
+        "🛡 NEURALSEARCH CORE\n"
+        "━━━━━━━━━━━━━━━━━━━━\n\n"
+        "⚡ Fast Search\n"
+        "🌐 Public Sources\n"
+        "🧠 Data Analysis\n\n"
+        "SYSTEM: 🟢 ONLINE"
+    )
+
+    await update.message.reply_text(
+        text,
+        reply_markup=main_menu(),
     )
 
 
-# =========================
+# ============================================================
 # BUTTONS
-# =========================
+# ============================================================
 
-async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def buttons(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+):
 
     query = update.callback_query
 
@@ -147,56 +177,60 @@ async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query.data == "username":
 
         await query.message.reply_text(
-            "👤 USERNAME\n\n"
+            "👤 USERNAME SEARCH\n\n"
+            "Введи username:\n\n"
+            "/search @username\n\n"
             "Пример:\n"
-            "/search octocat"
-        )
-
-    elif query.data == "domain":
-
-        await query.message.reply_text(
-            "🌐 DOMAIN\n\n"
-            "Пример:\n"
-            "/search example.com"
+            "/search @octocat"
         )
 
     elif query.data == "ip":
 
         await query.message.reply_text(
-            "🌍 IP\n\n"
-            "Пример:\n"
+            "🌍 IP INTELLIGENCE\n\n"
+            "Введи IP:\n\n"
             "/search 8.8.8.8"
+        )
+
+    elif query.data == "domain":
+
+        await query.message.reply_text(
+            "🌐 DOMAIN INTELLIGENCE\n\n"
+            "Введи домен:\n\n"
+            "/search example.com"
         )
 
     elif query.data == "url":
 
         await query.message.reply_text(
-            "🔗 URL\n\n"
-            "Пример:\n"
+            "🔗 URL ANALYSIS\n\n"
+            "Введи URL:\n\n"
             "/search https://example.com"
         )
 
-    elif query.data == "help":
+    elif query.data == "about":
 
         await query.message.reply_text(
-            "ℹ️ HELP\n\n"
-            "Бот работает только с публичной информацией.\n\n"
-            "Он не получает приватные данные,\n"
-            "не обходит авторизацию и не использует\n"
-            "закрытые или слитые базы."
+            "🧠 NEURALSEARCH\n\n"
+            "Public Intelligence Engine.\n\n"
+            "⚡ Быстрый поиск\n"
+            "🌐 Открытые источники\n"
+            "🔎 Анализ публичных данных\n\n"
+            "🛡 Только публичная информация.\n"
+            "Приватные данные, закрытые аккаунты\n"
+            "и слитые базы не используются."
         )
 
 
-# =========================
+# ============================================================
 # CONTACT EXTRACTION
-# =========================
+# ============================================================
 
 def extract_public_contacts(html):
 
     emails = set()
     phones = set()
 
-    # Удаляем JavaScript.
     text = re.sub(
         r"<script\b[^>]*>.*?</script>",
         " ",
@@ -204,7 +238,6 @@ def extract_public_contacts(html):
         flags=re.I | re.S,
     )
 
-    # Удаляем CSS.
     text = re.sub(
         r"<style\b[^>]*>.*?</style>",
         " ",
@@ -212,16 +245,15 @@ def extract_public_contacts(html):
         flags=re.I | re.S,
     )
 
-    # Удаляем HTML.
     text = re.sub(
         r"<[^>]+>",
         " ",
         text,
     )
 
-    # =========================
+    # --------------------------------------------------------
     # EMAIL
-    # =========================
+    # --------------------------------------------------------
 
     email_pattern = (
         r"\b[A-Za-z0-9._%+-]+"
@@ -250,9 +282,9 @@ def extract_public_contacts(html):
         if email not in ignored_emails:
             emails.add(email)
 
-    # =========================
+    # --------------------------------------------------------
     # PHONE
-    # =========================
+    # --------------------------------------------------------
 
     phone_pattern = (
         r"(?<![\d.])"
@@ -277,7 +309,7 @@ def extract_public_contacts(html):
         if not 8 <= len(digits) <= 15:
             continue
 
-        # IP address.
+        # Не принимаем IP.
         try:
 
             ipaddress.ip_address(
@@ -290,7 +322,7 @@ def extract_public_contacts(html):
 
             pass
 
-        # Координаты.
+        # Не принимаем координаты.
         if (
             "." in phone
             and "+" not in phone
@@ -299,21 +331,21 @@ def extract_public_contacts(html):
         ):
             continue
 
-        # Даты.
+        # Не принимаем даты.
         if re.fullmatch(
             r"\d{1,4}[-/.]\d{1,2}[-/.]\d{1,4}",
             phone,
         ):
             continue
 
-        # Технические числа.
+        # Не принимаем длинные технические числа.
         if re.fullmatch(
             r"\d{12,}",
             digits,
         ):
             continue
 
-        # Номер должен иметь форматирование.
+        # Нужен телефонный формат.
         if (
             "+" not in phone
             and not re.search(
@@ -340,9 +372,9 @@ def extract_public_contacts(html):
     )
 
 
-# =========================
-# CHECK PROFILE
-# =========================
+# ============================================================
+# PROFILE CHECK
+# ============================================================
 
 def check_profile(item):
 
@@ -357,7 +389,7 @@ def check_profile(item):
             headers={
                 "User-Agent":
                 "Mozilla/5.0 "
-                "(compatible; OSINTSearchBot/4.0)",
+                "(compatible; NeuralSearch/1.0)",
             },
         )
 
@@ -401,9 +433,9 @@ def check_profile(item):
         }
 
 
-# =========================
+# ============================================================
 # USERNAME SEARCH
-# =========================
+# ============================================================
 
 async def username_search(
     update,
@@ -427,10 +459,12 @@ async def username_search(
 
         return
 
-    message = await update.message.reply_text(
-        f"🔎 OSINT-ПРОВЕРКА @{username}\n\n"
-        f"Источников: {len(SITES)}\n"
-        "⚡ Проверяю параллельно..."
+    progress = await update.message.reply_text(
+        f"⚡ NEURALSEARCH\n\n"
+        f"👤 Target: @{username}\n\n"
+        f"🌐 Sources: {len(SITES)}\n"
+        "🔎 Scanning public sources...\n\n"
+        "STATUS: 🟡 PROCESSING"
     )
 
     items = [
@@ -443,7 +477,7 @@ async def username_search(
 
     results = []
 
-    # Все проверки выполняются параллельно.
+    # Все источники проверяются одновременно.
     with ThreadPoolExecutor(
         max_workers=21,
     ) as executor:
@@ -489,21 +523,25 @@ async def username_search(
             result["phones"]
         )
 
-    # =========================
+    # ========================================================
     # REPORT
-    # =========================
+    # ========================================================
 
     text = (
-        "🔎 PUBLIC OSINT REPORT\n\n"
-        f"👤 Username: @{username}\n\n"
-        "📊 РЕЗУЛЬТАТ\n"
-        f"Проверено: {len(results)}\n"
-        f"Публичных страниц: {len(found)}\n"
-        f"Ограничено: {len(blocked)}\n\n"
+        "⚡ NEURALSEARCH REPORT\n\n"
+        "━━━━━━━━━━━━━━━━━━━━\n"
+        f"👤 TARGET: @{username}\n"
+        "━━━━━━━━━━━━━━━━━━━━\n\n"
+        "📊 SCAN RESULTS\n\n"
+        f"Sources checked: {len(results)}\n"
+        f"Profiles found: {len(found)}\n"
+        f"Restricted: {len(blocked)}\n\n"
     )
 
     # Profiles.
-    text += "🌐 ПРОФИЛИ\n\n"
+    text += (
+        "🌐 PUBLIC PROFILES\n\n"
+    )
 
     if found:
 
@@ -520,11 +558,13 @@ async def username_search(
     else:
 
         text += (
-            "Не найдено.\n\n"
+            "No public profiles found.\n\n"
         )
 
     # Emails.
-    text += "📧 ПУБЛИЧНЫЕ EMAIL\n\n"
+    text += (
+        "📧 PUBLIC EMAILS\n\n"
+    )
 
     if emails:
 
@@ -537,13 +577,15 @@ async def username_search(
     else:
 
         text += (
-            "Не найдено на проверенных страницах.\n"
+            "No public emails found.\n"
         )
 
     text += "\n"
 
     # Phones.
-    text += "📞 ПУБЛИЧНЫЕ ТЕЛЕФОНЫ\n\n"
+    text += (
+        "📞 PUBLIC PHONES\n\n"
+    )
 
     if phones:
 
@@ -556,29 +598,29 @@ async def username_search(
     else:
 
         text += (
-            "Не найдено на проверенных страницах.\n"
+            "No public phones found.\n"
         )
 
     text += (
-        "\n⚠️ ВАЖНО\n\n"
-        "Результаты получены из публично "
-        "доступных страниц. Совпадение "
-        "username не подтверждает личность "
-        "владельца аккаунта."
+        "\n━━━━━━━━━━━━━━━━━━━━\n"
+        "🛡 PUBLIC DATA ONLY\n"
+        "━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Информация получена из публичных "
+        "источников. Совпадение username "
+        "не подтверждает личность владельца."
     )
 
-    # Telegram limit.
     if len(text) > 4000:
 
         text = text[:3900]
 
         text += (
-            "\n\n…результат сокращён."
+            "\n\n…report truncated."
         )
 
     try:
 
-        await message.edit_text(
+        await progress.edit_text(
             text
         )
 
@@ -589,9 +631,9 @@ async def username_search(
         )
 
 
-# =========================
+# ============================================================
 # DNS
-# =========================
+# ============================================================
 
 def dns_lookup(
     domain,
@@ -623,9 +665,9 @@ def dns_lookup(
     ]
 
 
-# =========================
-# IP SEARCH
-# =========================
+# ============================================================
+# IP
+# ============================================================
 
 async def ip_search(
     update,
@@ -644,7 +686,10 @@ async def ip_search(
         data = response.json()
 
         text = (
-            "🌍 IP INFORMATION\n\n"
+            "⚡ NEURALSEARCH IP REPORT\n\n"
+            "━━━━━━━━━━━━━━━━━━━━\n"
+            "🌍 IP INTELLIGENCE\n"
+            "━━━━━━━━━━━━━━━━━━━━\n\n"
             f"IP: {data.get('ip', '—')}\n"
             f"Hostname: {data.get('hostname', '—')}\n"
             f"Country: {data.get('country', '—')}\n"
@@ -652,7 +697,8 @@ async def ip_search(
             f"City: {data.get('city', '—')}\n"
             f"Timezone: {data.get('timezone', '—')}\n"
             f"Organization: {data.get('org', '—')}\n"
-            f"Location: {data.get('loc', '—')}"
+            f"Location: {data.get('loc', '—')}\n\n"
+            "STATUS: 🟢 COMPLETE"
         )
 
         await update.message.reply_text(
@@ -667,13 +713,13 @@ async def ip_search(
         )
 
         await update.message.reply_text(
-            "❌ Не удалось получить информацию об IP."
+            "❌ IP lookup failed."
         )
 
 
-# =========================
+# ============================================================
 # DOMAIN
-# =========================
+# ============================================================
 
 def is_domain(value):
 
@@ -727,16 +773,20 @@ async def domain_search(
         )
 
         text = (
-            "🌐 DOMAIN INFORMATION\n\n"
+            "⚡ NEURALSEARCH DOMAIN REPORT\n\n"
+            "━━━━━━━━━━━━━━━━━━━━\n"
+            "🌐 DOMAIN INTELLIGENCE\n"
+            "━━━━━━━━━━━━━━━━━━━━\n\n"
             f"Domain: {domain}\n\n"
-            "🔹 A:\n"
+            "🔹 A\n"
             f"{chr(10).join(a) if a else '—'}\n\n"
-            "🔹 AAAA:\n"
+            "🔹 AAAA\n"
             f"{chr(10).join(aaaa) if aaaa else '—'}\n\n"
-            "🔹 MX:\n"
+            "🔹 MX\n"
             f"{chr(10).join(mx) if mx else '—'}\n\n"
-            "🔹 NS:\n"
-            f"{chr(10).join(ns) if ns else '—'}"
+            "🔹 NS\n"
+            f"{chr(10).join(ns) if ns else '—'}\n\n"
+            "STATUS: 🟢 COMPLETE"
         )
 
         await update.message.reply_text(
@@ -751,13 +801,13 @@ async def domain_search(
         )
 
         await update.message.reply_text(
-            "❌ Ошибка DNS-поиска."
+            "❌ Domain lookup failed."
         )
 
 
-# =========================
+# ============================================================
 # URL
-# =========================
+# ============================================================
 
 async def url_search(
     update,
@@ -773,7 +823,7 @@ async def url_search(
             headers={
                 "User-Agent":
                 "Mozilla/5.0 "
-                "(compatible; OSINTSearchBot/4.0)",
+                "(compatible; NeuralSearch/1.0)",
             },
         )
 
@@ -784,16 +834,20 @@ async def url_search(
         )
 
         text = (
-            "🔗 URL INFORMATION\n\n"
+            "⚡ NEURALSEARCH URL REPORT\n\n"
+            "━━━━━━━━━━━━━━━━━━━━\n"
+            "🔗 URL INTELLIGENCE\n"
+            "━━━━━━━━━━━━━━━━━━━━\n\n"
             f"URL: {url}\n"
             f"Final URL: {response.url}\n"
-            f"Status: {response.status_code}\n"
+            f"HTTP Status: {response.status_code}\n"
             f"Server: "
             f"{response.headers.get('Server', '—')}\n\n"
-            "📧 PUBLIC EMAIL\n"
+            "📧 PUBLIC EMAILS\n"
             f"{chr(10).join(sorted(emails)) if emails else '—'}\n\n"
-            "📞 PUBLIC PHONE\n"
-            f"{chr(10).join(sorted(phones)) if phones else '—'}"
+            "📞 PUBLIC PHONES\n"
+            f"{chr(10).join(sorted(phones)) if phones else '—'}\n\n"
+            "STATUS: 🟢 COMPLETE"
         )
 
         await update.message.reply_text(
@@ -808,13 +862,13 @@ async def url_search(
         )
 
         await update.message.reply_text(
-            "❌ Ошибка анализа URL."
+            "❌ URL analysis failed."
         )
 
 
-# =========================
-# SEARCH
-# =========================
+# ============================================================
+# SEARCH ROUTER
+# ============================================================
 
 async def search(
     update,
@@ -824,7 +878,8 @@ async def search(
     if not context.args:
 
         await update.message.reply_text(
-            "🔎 Использование:\n\n"
+            "⚡ NEURALSEARCH\n\n"
+            "Использование:\n\n"
             "/search @username\n"
             "/search example.com\n"
             "/search 8.8.8.8\n"
@@ -888,19 +943,19 @@ async def search(
     )
 
 
-# =========================
+# ============================================================
 # MAIN
-# =========================
+# ============================================================
 
 def main():
 
     if not TOKEN:
 
         raise RuntimeError(
-            "BOT_TOKEN не установлен."
+            "BOT_TOKEN is not configured."
         )
 
-    # Web server for Render.
+    # Render web server.
     threading.Thread(
         target=run_web,
         daemon=True,
@@ -934,7 +989,7 @@ def main():
     )
 
     print(
-        "OSINT Search Bot v4 started."
+        "NEURALSEARCH // SYSTEM ONLINE"
     )
 
     application.run_polling()
