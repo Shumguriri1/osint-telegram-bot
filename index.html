@@ -1034,15 +1034,11 @@
             document
                 .getElementById("registerCountry")
                 .value;
-
-    
-
-
+        
         if (!email ||
             !password ||
             !name ||
-            !country ||
-            !city) {
+            !country) {
 
             showError(
                 "registerError",
@@ -1100,7 +1096,6 @@
                 {
                     p_name: name,
                     p_country: country,
-                    p_city: city
                 }
             );
 
