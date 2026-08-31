@@ -1,3 +1,0 @@
-python-telegram-bot>=22,<23
-requests>=2.32
-flask>=3.0
