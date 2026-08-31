@@ -505,7 +505,7 @@ h2{
 <header>
 
     <div class="logo">
-        🚗 ШУМНЫЙ ПЕРЕКУР
+        🚗 ШУМНЫЙ ПЕРЕКУП
     </div>
 
     <div class="subtitle">
@@ -582,7 +582,7 @@ h2{
 
     <div class="notice">
 
-        Игроки сортируются по выбранному показателю.
+        
 
     </div>
 
@@ -1488,11 +1488,53 @@ error
    СОХРАНЕНИЕ В ЛИДЕРБОРД
 ========================================================= */
 
-function saveLeaderboardPlayer(){
+async function saveLeaderboardPlayer(){
 
-if(!player){
-return;
-}
+    if(!player){
+        return;
+    }
+
+    try{
+
+        const data = {
+            id: String(player.id),
+            name: player.name || "Игрок",
+            country: player.country || "Беларусь",
+            balance: Number(player.balance) || 50000,
+            total_spent: Number(player.totalSpent) || 0,
+            total_property: Number(calculateProperty()) || 0,
+            status: player.status || "Базовый",
+            status_level: Number(getStatus(player.totalSpent).level) || 0,
+            phone: player.phone || null,
+            garage: player.garage || []
+        };
+
+        const { error } = await supabase
+            .from("players")
+            .upsert(data, {
+                onConflict: "id"
+            });
+
+        if(error){
+            console.error(
+                "Ошибка сохранения игрока в Supabase:",
+                error
+            );
+            return;
+        }
+
+        console.log("Игрок сохранён в Supabase:", data.id);
+
+    }catch(error){
+
+        console.error(
+            "Ошибка таблицы лидеров:",
+            error
+        );
+
+    }
+
+}}
 
 try{
 
