@@ -2,9 +2,8 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<title>Шумный перекур</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Шумный перекуп</title>
 
 <style>
 *{
@@ -25,21 +24,22 @@ button,input,select{
 
 button{
     border:0;
+    cursor:pointer;
 }
 
 .app{
-    max-width:620px;
+    max-width:650px;
     margin:auto;
     min-height:100vh;
     padding-bottom:90px;
 }
 
 header{
-    padding:18px 16px 12px;
     position:sticky;
     top:0;
     z-index:20;
-    background:rgba(8,9,12,.94);
+    padding:17px 16px 13px;
+    background:rgba(8,9,12,.95);
     backdrop-filter:blur(18px);
 }
 
@@ -49,17 +49,17 @@ header{
 }
 
 .subtitle{
-    color:#858b96;
-    font-size:13px;
     margin-top:3px;
+    color:#818792;
+    font-size:13px;
 }
 
 .balance{
     margin-top:14px;
-    background:#15171c;
-    border:1px solid #282b33;
+    padding:14px;
+    border:1px solid #292d36;
     border-radius:18px;
-    padding:13px;
+    background:#15171c;
 }
 
 .balance-title{
@@ -68,9 +68,9 @@ header{
 }
 
 .balance-money{
-    font-size:25px;
-    font-weight:900;
     margin-top:3px;
+    font-size:26px;
+    font-weight:900;
 }
 
 main{
@@ -90,89 +90,91 @@ h2{
 }
 
 .notice{
-    background:#15171c;
-    border:1px solid #292c34;
-    border-radius:16px;
     padding:13px;
-    color:#aeb3bc;
     margin-bottom:14px;
+    border:1px solid #292d36;
+    border-radius:16px;
+    background:#15171c;
+    color:#aeb3bc;
+    line-height:1.45;
 }
 
-.market-date{
+.market-top{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:14px;
+    margin-bottom:13px;
 }
 
-.day{
-    font-weight:800;
+.market-day{
+    font-weight:850;
 }
 
-.timer{
-    color:#858b95;
+.market-timer{
+    color:#818792;
     font-size:12px;
 }
 
 .cars{
     display:grid;
-    gap:14px;
+    gap:15px;
 }
 
 .car{
-    background:#15171c;
-    border:1px solid #292c34;
-    border-radius:20px;
     overflow:hidden;
+    border:1px solid #292d36;
+    border-radius:20px;
+    background:#15171c;
 }
 
 .car-image{
-    height:190px;
+    display:block;
     width:100%;
+    height:205px;
     object-fit:cover;
-    background:#202228;
+    background:#20232a;
 }
 
 .car-body{
-    padding:14px;
+    padding:15px;
 }
 
 .car-name{
-    font-size:18px;
+    font-size:19px;
     font-weight:900;
 }
 
 .meta{
-    color:#8d929c;
+    margin-top:8px;
+    color:#9298a2;
     font-size:13px;
-    margin-top:7px;
-    line-height:1.55;
+    line-height:1.6;
 }
 
 .price{
-    font-size:22px;
-    font-weight:900;
     margin-top:10px;
+    font-size:23px;
+    font-weight:900;
 }
 
-.badge{
+.market-price{
     display:inline-block;
-    background:#252832;
-    color:#c7ccd4;
+    margin-top:8px;
     padding:5px 8px;
     border-radius:8px;
+    background:#252831;
+    color:#c4c9d1;
     font-size:11px;
-    margin-top:9px;
 }
 
 .btn{
     width:100%;
+    margin-top:10px;
     padding:14px;
     border-radius:14px;
-    color:#fff;
-    background:#2f6fff;
+    background:#326fff;
+    color:white;
     font-weight:850;
-    margin-top:9px;
 }
 
 .btn.green{
@@ -180,57 +182,90 @@ h2{
 }
 
 .btn.red{
-    background:#a92f37;
+    background:#aa3038;
 }
 
 .btn.dark{
-    background:#24272f;
+    background:#252830;
 }
 
 .bottom{
     position:fixed;
+    right:0;
     bottom:0;
     left:0;
-    right:0;
-    height:76px;
-    background:rgba(14,15,19,.97);
-    border-top:1px solid #292c34;
     z-index:50;
+    height:76px;
+    border-top:1px solid #292d36;
+    background:rgba(14,15,19,.97);
 }
 
 .bottom-inner{
-    max-width:620px;
-    height:100%;
-    margin:auto;
     display:grid;
     grid-template-columns:repeat(3,1fr);
+    max-width:650px;
+    height:100%;
+    margin:auto;
 }
 
 .nav{
     background:none;
-    color:#727883;
+    color:#747a85;
     font-size:12px;
-    font-weight:700;
+    font-weight:750;
 }
 
 .nav.active{
-    color:#fff;
+    color:white;
 }
 
-.icon{
+.nav-icon{
     display:block;
-    font-size:22px;
     margin-bottom:3px;
+    font-size:22px;
+}
+
+.profile-card{
+    padding:17px;
+    border:1px solid #292d36;
+    border-radius:20px;
+    background:#15171c;
+}
+
+.profile-row{
+    padding:13px 0;
+    border-bottom:1px solid #292d36;
+}
+
+.profile-row:last-child{
+    border-bottom:0;
+}
+
+.label{
+    color:#7d838d;
+    font-size:11px;
+}
+
+.value{
+    margin-top:4px;
+    font-weight:850;
+}
+
+.empty{
+    padding:40px 10px;
+    color:#777e89;
+    text-align:center;
+    line-height:1.5;
 }
 
 .modal-bg{
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,.78);
+    z-index:100;
     display:none;
     align-items:flex-end;
     justify-content:center;
-    z-index:100;
+    background:rgba(0,0,0,.8);
 }
 
 .modal-bg.show{
@@ -239,12 +274,12 @@ h2{
 
 .modal{
     width:100%;
-    max-width:620px;
-    max-height:92vh;
+    max-width:650px;
+    max-height:93vh;
     overflow-y:auto;
-    background:#15171c;
-    border-radius:25px 25px 0 0;
     padding:20px;
+    border-radius:25px 25px 0 0;
+    background:#15171c;
 }
 
 .modal h2{
@@ -252,86 +287,63 @@ h2{
 }
 
 .modal-img{
+    display:block;
     width:100%;
     height:230px;
     object-fit:cover;
     border-radius:18px;
+    background:#20232a;
 }
 
-.input{
+.input,
+.select{
     width:100%;
     padding:15px;
     margin-top:10px;
+    outline:none;
+    border:1px solid #30343d;
     border-radius:13px;
-    border:1px solid #30333c;
     background:#0d0f13;
     color:#fff;
-    outline:none;
-}
-
-.profile-card{
-    background:#15171c;
-    border:1px solid #292c34;
-    border-radius:20px;
-    padding:17px;
-}
-
-.profile-row{
-    padding:13px 0;
-    border-bottom:1px solid #292c34;
-}
-
-.profile-row:last-child{
-    border-bottom:0;
-}
-
-.label{
-    color:#818791;
-    font-size:11px;
-}
-
-.value{
-    margin-top:4px;
-    font-weight:800;
-}
-
-.empty{
-    text-align:center;
-    color:#7c828c;
-    padding:35px 10px;
 }
 
 .chat{
-    background:#0d0f13;
-    border:1px solid #2b2e36;
-    border-radius:18px;
-    padding:12px;
+    padding:10px;
     margin-top:12px;
+    border:1px solid #2c3038;
+    border-radius:18px;
+    background:#0d0f13;
 }
 
 .message{
-    padding:10px 12px;
-    border-radius:14px;
-    margin:7px 0;
     max-width:88%;
+    padding:10px 12px;
+    margin:7px 0;
+    border-radius:14px;
     font-size:14px;
+    line-height:1.4;
 }
 
 .message.seller{
-    background:#24272f;
+    background:#252830;
 }
 
 .message.me{
-    background:#2f6fff;
     margin-left:auto;
+    background:#326fff;
 }
 
-.offer{
-    background:#191c22;
-    border:1px solid #30333b;
-    border-radius:16px;
+.offer-box{
     padding:13px;
     margin-top:12px;
+    border:1px solid #30343d;
+    border-radius:16px;
+    background:#191c22;
+}
+
+.small{
+    color:#818792;
+    font-size:12px;
 }
 
 @media(min-width:600px){
@@ -340,7 +352,7 @@ h2{
     }
 
     .car-image{
-        height:165px;
+        height:180px;
     }
 }
 </style>
@@ -356,35 +368,35 @@ h2{
 <div class="subtitle">Симулятор автомобильного перекупа</div>
 
 <div class="balance">
-
-<div class="balance-title">ВАШ БАЛАНС</div>
-
-<div class="balance-money" id="balance">
-€20 000
-</div>
-
+<div class="balance-title">БАЛАНС</div>
+<div class="balance-money" id="balance">€20 000</div>
 </div>
 
 </header>
 
 <main>
 
-<!-- РЫНОК -->
+<!-- MARKET -->
 
 <section class="page active" id="marketPage">
 
 <h2>Рынок</h2>
 
-<div class="market-date">
+<div class="market-top">
 
-<div class="day" id="marketDay"></div>
+<div class="market-day" id="marketDay">
+Рынок
+</div>
 
-<div class="timer" id="marketTimer"></div>
+<div class="market-timer" id="marketTimer">
+00:00:00
+</div>
 
 </div>
 
 <div class="notice">
-Каждый день рынок обновляется. Здесь появляется только часть автомобилей.
+Сегодня на рынке только несколько автомобилей.
+Завтра ассортимент изменится.
 </div>
 
 <div class="cars" id="marketCars"></div>
@@ -392,7 +404,7 @@ h2{
 </section>
 
 
-<!-- ГАРАЖ -->
+<!-- GARAGE -->
 
 <section class="page" id="garagePage">
 
@@ -403,7 +415,7 @@ h2{
 </section>
 
 
-<!-- ПРОФИЛЬ -->
+<!-- PROFILE -->
 
 <section class="page" id="profilePage">
 
@@ -446,41 +458,30 @@ h2{
 🔐 Moder
 </button>
 
-<button class="btn red" onclick="logout()">
-Выйти
-</button>
-
 </section>
 
 </main>
 
 
+<!-- NAVIGATION -->
+
 <div class="bottom">
 
 <div class="bottom-inner">
 
-<button class="nav active"
-onclick="showPage('marketPage',this)">
-
-<span class="icon">🚘</span>
+<button class="nav active" onclick="showPage('marketPage',this)">
+<span class="nav-icon">🚘</span>
 Рынок
-
 </button>
 
-<button class="nav"
-onclick="showPage('garagePage',this)">
-
-<span class="icon">🏠</span>
+<button class="nav" onclick="showPage('garagePage',this)">
+<span class="nav-icon">🏠</span>
 Гараж
-
 </button>
 
-<button class="nav"
-onclick="showPage('profilePage',this)">
-
-<span class="icon">👤</span>
+<button class="nav" onclick="showPage('profilePage',this)">
+<span class="nav-icon">👤</span>
 Профиль
-
 </button>
 
 </div>
@@ -490,31 +491,28 @@ onclick="showPage('profilePage',this)">
 </div>
 
 
-<!-- РЕГИСТРАЦИЯ -->
+<!-- REGISTRATION -->
 
 <div class="modal-bg show" id="registerModal">
 
 <div class="modal">
 
-<h2>Добро пожаловать</h2>
+<h2>Добро пожаловать 👋</h2>
 
 <div class="notice">
-Создай своего перекупа.
-Стартовый капитал — €20 000.
+Создай своего перекупа.<br>
+Стартовый капитал: <b>€20 000</b>.
 </div>
 
 <input
 class="input"
 id="regName"
-placeholder="Имя">
+placeholder="Введите имя"
+maxlength="30">
 
-<select
-class="input"
-id="regCountry">
+<select class="input" id="regCountry">
 
-<option value="">
-Выберите страну
-</option>
+<option value="">Выберите страну</option>
 
 <option value="Беларусь">
 🇧🇾 Беларусь
@@ -526,11 +524,8 @@ id="regCountry">
 
 </select>
 
-<button class="btn"
-onclick="register()">
-
-Создать игрока
-
+<button class="btn" onclick="register()">
+Начать игру
 </button>
 
 </div>
@@ -538,55 +533,50 @@ onclick="register()">
 </div>
 
 
-<!-- МАШИНА -->
+<!-- CAR MODAL -->
 
 <div class="modal-bg" id="carModal">
 
 <div class="modal">
 
-<h2 id="modalName"></h2>
+<h2 id="modalName">Автомобиль</h2>
 
 <img
 id="modalImage"
-class="modal-img">
+class="modal-img"
+alt="Автомобиль">
 
-<div class="notice"
-id="modalInfo">
-</div>
+<div class="notice" id="modalInfo"></div>
 
-<div class="offer">
+<div class="offer-box">
 
-<div style="color:#858b95;font-size:12px;">
-ТВОЁ ПРЕДЛОЖЕНИЕ
+<div class="small">
+ПРЕДЛОЖИТЬ СВОЮ ЦЕНУ
 </div>
 
 <input
 class="input"
 id="offerInput"
 type="number"
-placeholder="Например: 52000">
+inputmode="numeric"
+placeholder="Например €25 000">
 
-<button class="btn"
-onclick="makeOffer()">
-
-💬 Предложить цену
-
+<button class="btn" onclick="makeOffer()">
+💬 Торговаться
 </button>
 
 </div>
 
-<button class="btn green"
-id="buyButton">
+<button class="btn dark" onclick="openChat()">
+💬 Написать продавцу
+</button>
 
+<button class="btn green" id="buyButton">
 Купить
-
 </button>
 
-<button class="btn dark"
-onclick="closeModal('carModal')">
-
+<button class="btn dark" onclick="closeModal('carModal')">
 Закрыть
-
 </button>
 
 </div>
@@ -594,47 +584,43 @@ onclick="closeModal('carModal')">
 </div>
 
 
-<!-- ТОРГ -->
+<!-- CHAT -->
 
 <div class="modal-bg" id="chatModal">
 
 <div class="modal">
 
 <h2 id="chatTitle">
-Переписка с продавцом
+💬 Продавец
 </h2>
 
 <div class="chat" id="chatMessages"></div>
 
-<div class="offer">
+<div class="offer-box">
+
+<div class="small">
+ТВОЁ ПРЕДЛОЖЕНИЕ
+</div>
 
 <input
 class="input"
 id="chatOffer"
 type="number"
-placeholder="Твоя цена">
+inputmode="numeric"
+placeholder="Цена">
 
-<button class="btn"
-onclick="sendOffer()">
-
-Отправить предложение
-
+<button class="btn" onclick="sendOffer()">
+Отправить
 </button>
 
 </div>
 
-<button class="btn green"
-onclick="acceptDeal()">
-
-🤝 Договориться
-
+<button class="btn green" onclick="acceptDeal()">
+🤝 Договорились
 </button>
 
-<button class="btn dark"
-onclick="closeModal('chatModal')">
-
+<button class="btn dark" onclick="closeModal('chatModal')">
 Закрыть
-
 </button>
 
 </div>
@@ -656,18 +642,12 @@ id="moderPassword"
 type="password"
 placeholder="Пароль">
 
-<button class="btn"
-onclick="moderLogin()">
-
+<button class="btn" onclick="moderLogin()">
 Войти
-
 </button>
 
-<button class="btn dark"
-onclick="closeModal('moderLoginModal')">
-
+<button class="btn dark" onclick="closeModal('moderLoginModal')">
 Отмена
-
 </button>
 
 </div>
@@ -675,7 +655,7 @@ onclick="closeModal('moderLoginModal')">
 </div>
 
 
-<!-- MODER -->
+<!-- MODER PANEL -->
 
 <div class="modal-bg" id="moderModal">
 
@@ -687,46 +667,28 @@ onclick="closeModal('moderLoginModal')">
 Панель администратора
 </div>
 
-<button class="btn green"
-onclick="giveMoney(100000)">
-
-💰 Выдать €100 000
-
+<button class="btn green" onclick="giveMoney(100000)">
+💰 + €100 000
 </button>
 
-<button class="btn"
-onclick="giveMoney(1000000)">
-
-💰 Выдать €1 000 000
-
+<button class="btn green" onclick="giveMoney(1000000)">
+💰 + €1 000 000
 </button>
 
-<button class="btn dark"
-onclick="resetBalance()">
-
+<button class="btn dark" onclick="resetBalance()">
 🔄 Обнулить баланс
-
 </button>
 
-<button class="btn dark"
-onclick="moderCar()">
-
-🚗 Выдать любую машину
-
+<button class="btn dark" onclick="moderCar()">
+🚗 Выдать машину
 </button>
 
-<button class="btn dark"
-onclick="moderPhone()">
-
-📱 Выдать номер
-
+<button class="btn dark" onclick="moderPhone()">
+📱 Выдать телефон
 </button>
 
-<button class="btn red"
-onclick="closeModal('moderModal')">
-
+<button class="btn red" onclick="closeModal('moderModal')">
 Закрыть
-
 </button>
 
 </div>
@@ -736,73 +698,73 @@ onclick="closeModal('moderModal')">
 
 <script>
 
-/* ======================================================
-   ДАННЫЕ ИГРЫ
-====================================================== */
+/* =========================================================
+   МАШИНЫ
+========================================================= */
 
 const cars = [
 
 {
 id:1,
-name:"BMW M5 E60",
-base:28000,
-repair:3500,
-sell:39000,
-image:"https://images.unsplash.com/photo-1556189250-72ba954cfc2b?auto=format&fit=crop&w=1000&q=85"
+name:"BMW M5 F90 Competition",
+base:72000,
+repair:4500,
+sell:85000,
+image:"https://mvforged.com/wp-content/uploads/2025/08/m5-sl-100-001-e1756144788216.jpg"
 },
 
 {
 id:2,
-name:"BMW M5 F10",
-base:38000,
-repair:3200,
-sell:49000,
-image:"https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=1000&q=85"
+name:"BMW M5 E60",
+base:28000,
+repair:3500,
+sell:39000,
+image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7CM1-XfaJWwRtpzTMl5MzhsZpu6YecEfaFz-sO1MagViN3_dPhz_5Bj8&s=10"
 },
 
 {
 id:3,
-name:"BMW M5 F90 Competition",
-base:72000,
-repair:4800,
-sell:85000,
-image:"https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1000&q=85"
+name:"BMW M5 F10",
+base:38000,
+repair:3200,
+sell:49000,
+image:"https://www.exoticcarhacks.com/wp-content/uploads/2024/12/Used-2016-BMW-M5-w-Executive-Pack-FULL-Merino-Leather-Dinan-Exhaust-1713898293.jpg"
 },
 
 {
 id:4,
-name:"BMW M5 G90",
-base:105000,
-repair:6000,
-sell:122000,
-image:"https://images.unsplash.com/photo-1523983388277-336a66bf9bcd?auto=format&fit=crop&w=1000&q=85"
-},
-
-{
-id:5,
 name:"BMW M8 Competition",
 base:88000,
 repair:5200,
 sell:104000,
-image:"https://images.unsplash.com/photo-1555353540-64580b51c258?auto=format&fit=crop&w=1000&q=85"
+image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTX97ef5tr-HjicbNaJMPHDqscBomRoYaaobd3k-THpR3SauX4fYXJVbg&s=10"
 },
 
 {
-id:6,
+id:5,
 name:"BMW M6 Competition",
 base:48000,
 repair:4200,
 sell:60000,
-image:"https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1000&q=85"
+image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxrxJe2VYw5QtdBh8Te7VHkcL-YR0sUmVBQzXHsjlMJtT6eJeuh1N294s&s=10"
 },
 
 {
-id:7,
+id:6,
 name:"BMW M2 Competition",
 base:43000,
 repair:3000,
 sell:53000,
-image:"https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1000&q=85"
+image:"https://images.pistonheads.com/nimg/47015/mceu_116926957281680108796676.jpg"
+},
+
+{
+id:7,
+name:"BMW M5 G90",
+base:105000,
+repair:6000,
+sell:122000,
+image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYbNpUcertBTBNDD3qR132uFVTqXPkezdWKyw-oRDong&s=10"
 },
 
 {
@@ -811,7 +773,7 @@ name:"BMW M4 G82",
 base:63000,
 repair:3800,
 sell:76000,
-image:"https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1000&q=85"
+image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTE4w6Qn10dYIItKAMj_ggzBKaUNiyPj8W5-7EzzevYh4hJOggF99Hw6BQ&s=10"
 },
 
 {
@@ -820,7 +782,7 @@ name:"BMW M3 Touring",
 base:78000,
 repair:4500,
 sell:92000,
-image:"https://images.unsplash.com/photo-1542282088-fe8426682b8f?auto=format&fit=crop&w=1000&q=85"
+image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsPe_huPjEjP3GPi3SEvLgZVffInTCSxOrebkGlcK4DS80MtLj8nibNXE&s=10"
 },
 
 {
@@ -829,139 +791,74 @@ name:"BMW M4 F82",
 base:46000,
 repair:3200,
 sell:57000,
-image:"https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=1000&q=85"
-},
-
-{
-id:11,
-name:"Mercedes E63S",
-base:68000,
-repair:4700,
-sell:82000,
-image:"https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1000&q=85"
-},
-
-{
-id:12,
-name:"Mercedes C63",
-base:45000,
-repair:3500,
-sell:56000,
-image:"https://images.unsplash.com/photo-1618843479619-f3d0b5e2a7ef?auto=format&fit=crop&w=1000&q=85"
-},
-
-{
-id:13,
-name:"Mercedes Gelandewagen AMG",
-base:115000,
-repair:6500,
-sell:135000,
-image:"https://images.unsplash.com/photo-1520031441872-265e4ff70366?auto=format&fit=crop&w=1000&q=85"
-},
-
-{
-id:14,
-name:"Audi A8",
-base:52000,
-repair:3500,
-sell:65000,
-image:"https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=1000&q=85"
-},
-
-{
-id:15,
-name:"Audi RS7",
-base:82000,
-repair:4800,
-sell:98000,
-image:"https://images.unsplash.com/photo-1603584173870-7f23f2c2c7a0?auto=format&fit=crop&w=1000&q=85"
-},
-
-{
-id:16,
-name:"Audi RS6",
-base:79000,
-repair:4700,
-sell:95000,
-image:"https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=1000&q=85"
-},
-
-{
-id:17,
-name:"Audi Q5",
-base:35000,
-repair:2600,
-sell:45000,
-image:"https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1000&q=85"
-},
-
-{
-id:18,
-name:"Audi A6",
-base:31000,
-repair:2400,
-sell:41000,
-image:"https://images.unsplash.com/photo-1605559424843-9e4c228bf1c9?auto=format&fit=crop&w=1000&q=85"
-},
-
-{
-id:19,
-name:"Audi R8",
-base:92000,
-repair:5500,
-sell:110000,
-image:"https://images.unsplash.com/photo-1504215680853-026ed2a45def?auto=format&fit=crop&w=1000&q=85"
+image:"https://r44performance.com/cdn/shop/files/BMW-F82-M4-Exterior-Styling-MOBILE.jpg?v=1739953646&width=3000"
 }
 
 ];
 
 
-/* ======================================================
+/* =========================================================
    PLAYER
-====================================================== */
+========================================================= */
 
 let player =
-JSON.parse(localStorage.getItem("shum_player_v2")) || null;
+JSON.parse(localStorage.getItem("shum_player_v3")) || null;
 
-let selectedMarketCar = null;
+let selectedCar = null;
+let selectedPrice = 0;
 
-let selectedSellerPrice = 0;
 
-
-/* ======================================================
+/* =========================================================
    ID
-====================================================== */
+========================================================= */
 
 function generateId(){
 
-let n =
-Number(localStorage.getItem("shum_id_counter") || 0)+1;
+let number =
+Number(
+localStorage.getItem("shum_id_counter") || "0"
+);
+
+number++;
 
 localStorage.setItem(
 "shum_id_counter",
-n
+number
 );
 
-return "A"+String(n).padStart(4,"0")+"AA";
+return "A"+
+String(number).padStart(4,"0")+
+"AA";
 
 }
 
 
-/* ======================================================
+/* =========================================================
    REGISTER
-====================================================== */
+========================================================= */
 
 function register(){
 
 const name =
-document.getElementById("regName").value.trim();
+document.getElementById("regName")
+.value
+.trim();
 
 const country =
-document.getElementById("regCountry").value;
+document.getElementById("regCountry")
+.value;
 
-if(!name || !country){
+if(!name){
 
-alert("Заполни имя и выбери страну.");
+alert("Введите имя.");
+
+return;
+
+}
+
+if(!country){
+
+alert("Выберите страну.");
 
 return;
 
@@ -971,13 +868,13 @@ player={
 
 id:generateId(),
 
-name,
+name:name,
 
-country,
-
-balance:20000,
+country:country,
 
 status:"Игрок",
+
+balance:20000,
 
 phone:null,
 
@@ -987,50 +884,49 @@ garage:[]
 
 save();
 
-document
-.getElementById("registerModal")
-.classList.remove("show");
+closeModal("registerModal");
 
 update();
 
 alert(
-"Добро пожаловать!\n\n"+
-"Твой ID: "+player.id+
-"\nБаланс: €20 000"
+"Игрок создан!\n\n"+
+"ID: "+player.id+
+"\n\nСтартовый баланс: €20 000"
 );
 
 }
 
 
-/* ======================================================
+/* =========================================================
    SAVE
-====================================================== */
+========================================================= */
 
 function save(){
 
 localStorage.setItem(
-"shum_player_v2",
+"shum_player_v3",
 JSON.stringify(player)
 );
 
 }
 
 
-/* ======================================================
+/* =========================================================
    MONEY
-====================================================== */
+========================================================= */
 
-function money(n){
+function money(value){
 
 return "€"+
-Number(n).toLocaleString("ru-RU");
+Number(value)
+.toLocaleString("ru-RU");
 
 }
 
 
-/* ======================================================
-   DAILY MARKET
-====================================================== */
+/* =========================================================
+   DAILY SEED
+========================================================= */
 
 function getDayKey(){
 
@@ -1045,12 +941,17 @@ String(d.getDate()).padStart(2,"0");
 
 function seededRandom(seed){
 
-let x=Math.sin(seed)*10000;
+const x=
+Math.sin(seed)*10000;
 
 return x-Math.floor(x);
 
 }
 
+
+/* =========================================================
+   DAILY MARKET
+========================================================= */
 
 function getDailyMarket(){
 
@@ -1060,67 +961,78 @@ let seed=0;
 
 for(let i=0;i<key.length;i++){
 
-seed += key.charCodeAt(i)*(i+1);
+seed+=
+key.charCodeAt(i)*(i+1);
 
 }
 
-let list=[...cars];
+let shuffled=[...cars];
 
-let result=[];
-
-for(let i=list.length-1;i>0;i--){
+for(
+let i=shuffled.length-1;
+i>0;
+i--
+){
 
 const r=
 Math.floor(
-seededRandom(seed+i*17)* (i+1)
+seededRandom(seed+i*37)*
+(i+1)
 );
 
-[list[i],list[r]]=
-[list[r],list[i]];
+[
+shuffled[i],
+shuffled[r]
+]=[
+shuffled[r],
+shuffled[i]
+];
 
 }
 
 const count=
 5+
 Math.floor(
-seededRandom(seed+777)*4
+seededRandom(seed+500)*4
 );
 
-for(let i=0;i<count;i++){
+return shuffled
+.slice(0,count)
+.map(car=>{
 
-const car=list[i];
+const variation=
+0.87+
+seededRandom(seed+car.id*73)*0.23;
 
-const variation =
-0.88+
-seededRandom(seed+car.id*31)*0.24;
-
-const price =
+const price=
 Math.round(
 car.base*variation/100
 )*100;
 
 const year=
-2013+
+2014+
 Math.floor(
-seededRandom(seed+car.id*43)*11
+seededRandom(seed+car.id*91)*11
 );
 
 const mileage=
 Math.round(
-(35000+
-seededRandom(seed+car.id*67)*145000)/1000
+(
+30000+
+seededRandom(seed+car.id*113)*150000
+)/1000
 )*1000;
 
-const conditionValue=
-seededRandom(seed+car.id*91);
+const state=
+seededRandom(seed+car.id*137);
 
 let condition;
 
-if(conditionValue>.8){
+if(state>.8){
 
 condition="Отличное";
 
-}else if(conditionValue>.45){
+}else if(state>.45){
 
 condition="Хорошее";
 
@@ -1130,55 +1042,507 @@ condition="Есть нюансы";
 
 }
 
-result.push({
+return{
 
 ...car,
 
 marketPrice:price,
 
-year,
-
-mileage,
-
-condition,
-
 sellerMin:
-Math.round(price*0.94/100)*100
+Math.round(
+price*0.93/100
+)*100,
+
+year:year,
+
+mileage:mileage,
+
+condition:condition
+
+};
 
 });
 
 }
 
-return result;
 
-}
-
-
-/* ======================================================
-   MARKET
-====================================================== */
+/* =========================================================
+   RENDER MARKET
+========================================================= */
 
 function renderMarket(){
 
 const market=
 getDailyMarket();
 
-document.getElementById("marketCars")
-.innerHTML="";
+const box=
+document.getElementById("marketCars");
+
+box.innerHTML="";
 
 document.getElementById("marketDay")
 .textContent=
-"Рынок — "+new Date()
+"Рынок • "+
+new Date()
 .toLocaleDateString("ru-RU");
 
 market.forEach(car=>{
 
-const div=
+const element=
 document.createElement("div");
 
-div.className="car";
+element.className="car";
 
-div.innerHTML=`
+element.innerHTML=`
+
+<img
+class="car-image"
+src="${car.image}"
+alt="${car.name}"
+onerror="this.style.opacity='.25'">
+
+<div class="car-body">
+
+<div class="car-name">
+${car.name}
+</div>
+
+<div class="meta">
+
+Год: ${car.year}<br>
+
+Пробег:
+${car.mileage.toLocaleString("ru-RU")} км<br>
+
+Состояние:
+${car.condition}
+
+</div>
+
+<div class="market-price">
+Средняя цена: ${money(car.base)}
+</div>
+
+<div class="price">
+${money(car.marketPrice)}
+</div>
+
+<button
+class="btn"
+onclick="openCar(${car.id})">
+
+Открыть машину
+
+</button>
+
+</div>
+
+`;
+
+box.appendChild(element);
+
+});
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function updateTimer(){
+
+const now=new Date();
+
+const next=new Date(now);
+
+next.setHours(24,0,0,0);
+
+const diff=
+next-now;
+
+const h=
+Math.floor(
+diff/3600000
+);
+
+const m=
+Math.floor(
+(diff%3600000)/60000
+);
+
+const s=
+Math.floor(
+(diff%60000)/1000
+);
+
+document.getElementById("marketTimer")
+.textContent=
+"Новинки через "+
+String(h).padStart(2,"0")+":"+
+String(m).padStart(2,"0")+":"+
+String(s).padStart(2,"0");
+
+}
+
+
+/* =========================================================
+   OPEN CAR
+========================================================= */
+
+function openCar(id){
+
+selectedCar=
+getDailyMarket()
+.find(c=>c.id===id);
+
+if(!selectedCar)return;
+
+selectedPrice=
+selectedCar.marketPrice;
+
+document.getElementById("modalName")
+.textContent=
+selectedCar.name;
+
+document.getElementById("modalImage")
+.src=
+selectedCar.image;
+
+document.getElementById("modalInfo")
+.innerHTML=`
+
+Год: <b>${selectedCar.year}</b><br><br>
+
+Пробег:
+<b>${selectedCar.mileage.toLocaleString("ru-RU")} км</b><br><br>
+
+Состояние:
+<b>${selectedCar.condition}</b><br><br>
+
+Средняя цена:
+<b>${money(selectedCar.base)}</b><br><br>
+
+Продавец хочет:
+<b>${money(selectedPrice)}</b>
+
+`;
+
+document.getElementById("buyButton")
+.textContent=
+"Купить за "+
+money(selectedPrice);
+
+document.getElementById("buyButton")
+.onclick=
+function(){
+
+buyCar(selectedPrice);
+
+};
+
+document.getElementById("offerInput")
+.value="";
+
+document
+.getElementById("carModal")
+.classList.add("show");
+
+}
+
+
+/* =========================================================
+   OFFER
+========================================================= */
+
+function makeOffer(){
+
+if(!selectedCar)return;
+
+const value=
+Number(
+document.getElementById("offerInput").value
+);
+
+if(!value){
+
+alert("Введи сумму.");
+
+return;
+
+}
+
+if(value>=selectedCar.sellerMin){
+
+selectedPrice=value;
+
+document.getElementById("modalInfo")
+.innerHTML+=`
+
+<br><br>
+
+<b>Продавец:</b><br>
+Ладно, договорились за
+${money(value)}.
+
+`;
+
+}else{
+
+const counter=
+Math.round(
+(
+value+
+selectedCar.sellerMin
+)/2/100
+)*100;
+
+selectedPrice=counter;
+
+document.getElementById("modalInfo")
+.innerHTML+=`
+
+<br><br>
+
+<b>Продавец:</b><br>
+Слишком мало.
+Могу отдать за
+${money(counter)}.
+
+`;
+
+}
+
+document.getElementById("buyButton")
+.textContent=
+"Купить за "+
+money(selectedPrice);
+
+}
+
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+function openChat(){
+
+if(!selectedCar)return;
+
+document.getElementById("chatTitle")
+.textContent=
+"💬 "+
+selectedCar.name;
+
+document.getElementById("chatMessages")
+.innerHTML=`
+
+<div class="message seller">
+
+Привет! Машина ещё продаётся.
+Цена сейчас
+${money(selectedPrice)}.
+
+</div>
+
+<div class="message seller">
+
+Если реально заинтересован —
+можем немного поторговаться.
+
+</div>
+
+`;
+
+closeModal("carModal");
+
+document
+.getElementById("chatModal")
+.classList.add("show");
+
+}
+
+
+function sendOffer(){
+
+if(!selectedCar)return;
+
+const value=
+Number(
+document.getElementById("chatOffer").value
+);
+
+if(!value){
+
+alert("Напиши сумму.");
+
+return;
+
+}
+
+const chat=
+document.getElementById("chatMessages");
+
+chat.innerHTML+=`
+
+<div class="message me">
+Предлагаю ${money(value)}
+</div>
+
+`;
+
+if(value>=selectedCar.sellerMin){
+
+selectedPrice=value;
+
+chat.innerHTML+=`
+
+<div class="message seller">
+Хорошо. За ${money(value)}
+договорились 🤝
+</div>
+
+`;
+
+}else{
+
+const counter=
+Math.round(
+(
+value+
+selectedCar.sellerMin
+)/2/100
+)*100;
+
+selectedPrice=counter;
+
+chat.innerHTML+=`
+
+<div class="message seller">
+Нет, дешевле не получится.
+Могу сделать ${money(counter)}.
+</div>
+
+`;
+
+}
+
+document.getElementById("chatOffer")
+.value="";
+
+}
+
+
+function acceptDeal(){
+
+if(!selectedCar)return;
+
+buyCar(selectedPrice);
+
+}
+
+
+/* =========================================================
+   BUY
+========================================================= */
+
+function buyCar(price){
+
+if(!selectedCar)return;
+
+if(player.balance<price){
+
+alert(
+"Недостаточно денег.\n\n"+
+"Твой баланс: "+
+money(player.balance)
+);
+
+return;
+
+}
+
+player.balance-=price;
+
+player.garage.push({
+
+garageId:Date.now(),
+
+name:selectedCar.name,
+
+image:selectedCar.image,
+
+year:selectedCar.year,
+
+mileage:selectedCar.mileage,
+
+purchasePrice:price,
+
+repair:selectedCar.repair,
+
+sell:selectedCar.sell,
+
+repaired:false
+
+});
+
+save();
+
+update();
+
+closeModal("carModal");
+
+closeModal("chatModal");
+
+alert(
+selectedCar.name+
+"\n\nКуплена за "+
+money(price)+
+"\n\nМашина отправлена в гараж."
+);
+
+}
+
+
+/* =========================================================
+   GARAGE
+========================================================= */
+
+function renderGarage(){
+
+const box=
+document.getElementById("garageCars");
+
+if(!player.garage.length){
+
+box.innerHTML=`
+
+<div class="empty">
+
+🏠 Гараж пуст.
+
+<br><br>
+
+Иди на рынок и найди первую машину.
+
+</div>
+
+`;
+
+return;
+
+}
+
+box.innerHTML="";
+
+player.garage.forEach(car=>{
+
+const element=
+document.createElement("div");
+
+element.className="car";
+
+element.innerHTML=`
 
 <img
 class="car-image"
@@ -1193,468 +1557,89 @@ ${car.name}
 
 <div class="meta">
 
-${car.year} год<br>
+Год: ${car.year}<br>
 
 Пробег:
 ${car.mileage.toLocaleString("ru-RU")} км<br>
 
-Состояние:
-${car.condition}
+Куплена:
+${money(car.purchasePrice)}
 
 </div>
 
-<div class="badge">
-Рынок: ${money(car.base)}
-</div>
+<div class="market-price">
 
-<div class="price">
-${money(car.marketPrice)}
-</div>
-
-<button
-class="btn"
-onclick="openCar(${car.id})">
-
-Открыть и торговаться
-
-</button>
-
-</div>
-`;
-
-document
-.getElementById("marketCars")
-.appendChild(div);
-
-});
-
-}
-
-
-/* ======================================================
-   TIMER
-====================================================== */
-
-function updateTimer(){
-
-const now=new Date();
-
-const tomorrow=new Date(now);
-
-tomorrow.setHours(24,0,0,0);
-
-const diff=tomorrow-now;
-
-const h=Math.floor(diff/3600000);
-
-const m=Math.floor(
-(diff%3600000)/60000
-);
-
-const s=Math.floor(
-(diff%60000)/1000
-);
-
-document.getElementById("marketTimer")
-.textContent=
-"Обновление через "+
-String(h).padStart(2,"0")+":"+
-String(m).padStart(2,"0")+":"+
-String(s).padStart(2,"0");
-
-}
-
-
-/* ======================================================
-   OPEN CAR
-====================================================== */
-
-function openCar(id){
-
-selectedMarketCar=
-getDailyMarket()
-.find(c=>c.id===id);
-
-if(!selectedMarketCar)return;
-
-selectedSellerPrice=
-selectedMarketCar.marketPrice;
-
-document.getElementById("modalName")
-.textContent=
-selectedMarketCar.name;
-
-document.getElementById("modalImage")
-.src=
-selectedMarketCar.image;
-
-document.getElementById("modalInfo")
-.innerHTML=
-
-"Год: <b>"+
-selectedMarketCar.year+
-"</b><br><br>"+
-
-"Пробег: <b>"+
-selectedMarketCar.mileage.toLocaleString("ru-RU")+
-" км</b><br><br>"+
-
-"Состояние: <b>"+
-selectedMarketCar.condition+
-"</b><br><br>"+
-
-"Рыночная цена: <b>"+
-money(selectedMarketCar.base)+
-"</b><br><br>"+
-
-"Цена продавца: <b>"+
-money(selectedSellerPrice)+
-"</b>";
-
-document.getElementById("buyButton")
-.textContent=
-"Купить за "+
-money(selectedSellerPrice);
-
-document.getElementById("buyButton")
-.onclick=
-()=>buyCar(selectedSellerPrice);
-
-document
-.getElementById("carModal")
-.classList.add("show");
-
-}
-
-
-/* ======================================================
-   OFFER
-====================================================== */
-
-function makeOffer(){
-
-const value=
-Number(
-document.getElementById("offerInput").value
-);
-
-if(!value){
-
-alert("Введи цену.");
-
-return;
-
-}
-
-if(value>=selectedMarketCar.sellerMin){
-
-selectedSellerPrice=value;
-
-document.getElementById("modalInfo")
-.innerHTML +=
-"<br><br><b>Продавец:</b> Ладно, договорились за "+
-money(value)+".";
-
-document.getElementById("buyButton")
-.textContent=
-"Купить за "+money(value);
-
-document.getElementById("buyButton")
-.onclick=
-()=>buyCar(value);
-
-}else{
-
-const counter=
-Math.round(
-(value+selectedMarketCar.sellerMin)/2/100
-)*100;
-
-selectedSellerPrice=counter;
-
-document.getElementById("modalInfo")
-.innerHTML +=
-"<br><br><b>Продавец:</b> "+
-"Нет, дешевле не отдам. Могу сделать "+
-money(counter)+".";
-
-document.getElementById("buyButton")
-.textContent=
-"Купить за "+money(counter);
-
-document.getElementById("buyButton")
-.onclick=
-()=>buyCar(counter);
-
-}
-
-}
-
-
-/* ======================================================
-   CHAT / SELLER
-====================================================== */
-
-function sendOffer(){
-
-const input=
-Number(
-document.getElementById("chatOffer").value
-);
-
-if(!input){
-
-alert("Введи предложение.");
-
-return;
-
-}
-
-const chat=
-document.getElementById("chatMessages");
-
-chat.innerHTML+=`
-
-<div class="message me">
-Предлагаю ${money(input)}
-</div>
-`;
-
-if(input>=selectedMarketCar.sellerMin){
-
-chat.innerHTML+=`
-
-<div class="message seller">
-Хорошо. Договорились за
-${money(input)}.
-</div>
-`;
-
-selectedSellerPrice=input;
-
-}else{
-
-const counter=
-Math.round(
-(selectedMarketCar.sellerMin+input)/2/100
-)*100;
-
-chat.innerHTML+=`
-
-<div class="message seller">
-Не, слишком мало.
-Могу отдать за ${money(counter)}.
-</div>
-`;
-
-selectedSellerPrice=counter;
-
-}
-
-document.getElementById("chatOffer")
-.value="";
-
-}
-
-
-/* ======================================================
-   OPEN CHAT
-====================================================== */
-
-function openChat(){
-
-document.getElementById("chatMessages")
-.innerHTML=`
-
-<div class="message seller">
-Привет. Машина ещё продаётся.
-Цена ${money(selectedSellerPrice)}.
-</div>
-`;
-
-document
-.getElementById("chatModal")
-.classList.add("show");
-
-}
-
-
-/* ======================================================
-   DEAL
-====================================================== */
-
-function acceptDeal(){
-
-closeModal("chatModal");
-
-buyCar(selectedSellerPrice);
-
-}
-
-
-/* ======================================================
-   BUY
-====================================================== */
-
-function buyCar(price){
-
-if(!selectedMarketCar)return;
-
-if(player.balance<price){
-
-alert("Недостаточно денег.");
-
-return;
-
-}
-
-player.balance-=price;
-
-player.garage.push({
-
-id:Date.now(),
-
-name:selectedMarketCar.name,
-
-image:selectedMarketCar.image,
-
-purchase:price,
-
-repair:selectedMarketCar.repair,
-
-sell:selectedMarketCar.sell,
-
-repaired:false,
-
-year:selectedMarketCar.year,
-
-mileage:selectedMarketCar.mileage
-
-});
-
-save();
-
-update();
-
-closeModal("carModal");
-
-alert(
-selectedMarketCar.name+
-"\nкуплена за "+
-money(price)+
-"\n\nАвтомобиль находится в гараже."
-);
-
-}
-
-
-/* ======================================================
-   GARAGE
-====================================================== */
-
-function renderGarage(){
-
-const box=
-document.getElementById("garageCars");
-
-if(!player.garage.length){
-
-box.innerHTML=
-'<div class="empty">Гараж пуст.<br><br>Иди на рынок и купи автомобиль.</div>';
-
-return;
-
-}
-
-box.innerHTML="";
-
-player.garage.forEach(car=>{
-
-const div=
-document.createElement("div");
-
-div.className="car";
-
-div.innerHTML=`
-
-<img
-class="car-image"
-src="${car.image}">
-
-<div class="car-body">
-
-<div class="car-name">
-${car.name}
-</div>
-
-<div class="meta">
-
-${car.year} год<br>
-
-${car.mileage.toLocaleString("ru-RU")} км
-
-</div>
-
-<div class="badge">
 ${
 car.repaired
-?"Отремонтирована"
-:"Требует ремонта"
+?"✅ Машина отремонтирована"
+:"🔧 Требуется ремонт"
 }
+
 </div>
 
 ${
 car.repaired
+
 ?
 
 `
+
 <button
 class="btn green"
-onclick="sellCar(${car.id})">
+onclick="sellCar(${car.garageId})">
 
-Продать за ${money(car.sell)}
+💰 Продать за ${money(car.sell)}
 
 </button>
+
 `
 
 :
 
 `
+
 <button
 class="btn"
-onclick="repairCar(${car.id})">
+onclick="repairCar(${car.garageId})">
 
-🔧 Ремонт — ${money(car.repair)}
+🔧 Отремонтировать за
+${money(car.repair)}
 
 </button>
+
 `
 
 }
 
 </div>
+
 `;
 
-box.appendChild(div);
+box.appendChild(element);
 
 });
 
 }
 
 
-/* ======================================================
+/* =========================================================
    REPAIR
-====================================================== */
+========================================================= */
 
 function repairCar(id){
 
 const car=
-player.garage.find(c=>c.id===id);
+player.garage.find(
+c=>c.garageId===id
+);
 
 if(!car)return;
 
 if(player.balance<car.repair){
 
-alert("Недостаточно денег.");
+alert(
+"Недостаточно денег на ремонт."
+);
 
 return;
 
@@ -1669,21 +1654,23 @@ save();
 update();
 
 alert(
-"Ремонт завершён.\n"+
-"Можно продавать автомобиль."
+"Ремонт завершён.\n\n"+
+"Теперь автомобиль можно продавать."
 );
 
 }
 
 
-/* ======================================================
+/* =========================================================
    SELL
-====================================================== */
+========================================================= */
 
 function sellCar(id){
 
 const index=
-player.garage.findIndex(c=>c.id===id);
+player.garage.findIndex(
+c=>c.garageId===id
+);
 
 if(index===-1)return;
 
@@ -1692,7 +1679,22 @@ player.garage[index];
 
 if(!car.repaired){
 
-alert("Сначала отремонтируй автомобиль.");
+alert(
+"Сначала отремонтируй машину."
+);
+
+return;
+
+}
+
+if(
+!confirm(
+"Продать "+
+car.name+
+" за "+
+money(car.sell)+
+"?")
+){
 
 return;
 
@@ -1707,32 +1709,37 @@ save();
 update();
 
 alert(
+"Продано!\n\n"+
 car.name+
-"\nПродана за "+
+"\n+"+
 money(car.sell)
 );
 
 }
 
 
-/* ======================================================
+/* =========================================================
    PHONE
-====================================================== */
+========================================================= */
 
-function randomDigits(n){
+function randomDigits(count){
 
-let s="";
+let result="";
 
-for(let i=0;i<n;i++){
+for(
+let i=0;
+i<count;
+i++
+){
 
-s+=
+result+=
 Math.floor(
 Math.random()*10
 );
 
 }
 
-return s;
+return result;
 
 }
 
@@ -1762,32 +1769,40 @@ return;
 
 player.balance-=price;
 
-const prefix=
-player.country==="Беларусь"
-?"+375"
-:"+7";
+if(player.country==="Беларусь"){
 
 player.phone=
-prefix+" "+
-randomDigits(3)+" "+
+"+375 "+
+randomDigits(2)+" "+
 randomDigits(3)+" "+
 randomDigits(2);
+
+}else{
+
+player.phone=
+"+7 "+
+randomDigits(3)+" "+
+randomDigits(3)+"-"+
+randomDigits(2)+"-"+
+randomDigits(2);
+
+}
 
 save();
 
 update();
 
 alert(
-"Номер куплен:\n"+
+"Номер куплен!\n\n"+
 player.phone
 );
 
 }
 
 
-/* ======================================================
+/* =========================================================
    MODER
-====================================================== */
+========================================================= */
 
 function openModerLogin(){
 
@@ -1800,17 +1815,20 @@ document
 
 function moderLogin(){
 
-const pass=
+const password=
 document.getElementById("moderPassword")
 .value;
 
-if(pass!=="ShumAuto"){
+if(password!=="ShumAuto"){
 
 alert("Неверный пароль.");
 
 return;
 
 }
+
+document.getElementById("moderPassword")
+.value="";
 
 closeModal("moderLoginModal");
 
@@ -1839,6 +1857,12 @@ money(amount)
 
 function resetBalance(){
 
+if(
+!confirm(
+"Обнулить баланс?"
+)
+)return;
+
 player.balance=0;
 
 save();
@@ -1853,10 +1877,21 @@ alert("Баланс обнулён.");
 function moderPhone(){
 
 player.phone=
-(player.country==="Беларусь"?"+375":"+7")+
-" "+
+player.country==="Беларусь"
+
+?
+
+"+375 "+
+randomDigits(2)+" "+
 randomDigits(3)+" "+
+randomDigits(2)
+
+:
+
+"+7 "+
 randomDigits(3)+" "+
+randomDigits(3)+"-"+
+randomDigits(2)+"-"+
 randomDigits(2);
 
 save();
@@ -1873,50 +1908,59 @@ player.phone
 
 function moderCar(){
 
-const text=
-cars.map(
-(c,i)=>
-(i+1)+". "+c.name
-).join("\n");
+let text=
+"Выбери машину:\n\n";
+
+cars.forEach(
+(car,index)=>{
+
+text+=
+(index+1)+
+". "+
+car.name+
+"\n";
+
+});
 
 const answer=
-prompt(
-"Номер машины:\n\n"+
-text
-);
+prompt(text);
 
 const index=
 Number(answer)-1;
 
-if(!cars[index]){
+if(
+isNaN(index) ||
+!cars[index]
+){
 
-alert("Такой машины нет.");
+alert("Неверный номер.");
 
 return;
 
 }
 
-const car=cars[index];
+const car=
+cars[index];
 
 player.garage.push({
 
-id:Date.now(),
+garageId:Date.now(),
 
 name:car.name,
 
 image:car.image,
 
-purchase:0,
+year:2025,
+
+mileage:0,
+
+purchasePrice:0,
 
 repair:0,
 
 sell:car.sell,
 
-repaired:true,
-
-year:2024,
-
-mileage:0
+repaired:true
 
 });
 
@@ -1926,22 +1970,23 @@ update();
 
 alert(
 car.name+
-"\nдобавлена в гараж."
+"\n\nДобавлена в гараж."
 );
 
 }
 
 
-/* ======================================================
-   NAV
-====================================================== */
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
 function showPage(id,button){
 
 document
 .querySelectorAll(".page")
-.forEach(p=>
-p.classList.remove("active")
+.forEach(
+page=>
+page.classList.remove("active")
 );
 
 document
@@ -1950,8 +1995,9 @@ document
 
 document
 .querySelectorAll(".nav")
-.forEach(n=>
-n.classList.remove("active")
+.forEach(
+nav=>
+nav.classList.remove("active")
 );
 
 button.classList.add("active");
@@ -1961,9 +2007,9 @@ window.scrollTo(0,0);
 }
 
 
-/* ======================================================
+/* =========================================================
    MODAL
-====================================================== */
+========================================================= */
 
 function closeModal(id){
 
@@ -1974,24 +2020,9 @@ document
 }
 
 
-/* ======================================================
-   LOGOUT
-====================================================== */
-
-function logout(){
-
-if(!confirm("Выйти?"))return;
-
-localStorage.removeItem("shum_player_v2");
-
-location.reload();
-
-}
-
-
-/* ======================================================
+/* =========================================================
    UPDATE
-====================================================== */
+========================================================= */
 
 function update(){
 
@@ -2019,7 +2050,7 @@ player.status;
 
 document.getElementById("profilePhone")
 .textContent=
-player.phone||"Не куплен";
+player.phone || "Не куплен";
 
 renderMarket();
 
@@ -2028,72 +2059,24 @@ renderGarage();
 }
 
 
-/* ======================================================
+/* =========================================================
    START
-====================================================== */
+========================================================= */
 
 if(player){
 
-document
-.getElementById("registerModal")
-.classList.remove("show");
+closeModal("registerModal");
 
 update();
 
 }
 
-setInterval(updateTimer,1000);
-
 updateTimer();
 
-
-/*
-   КНОПКА ЧАТА ДОБАВЛЯЕТСЯ ПОСЛЕ
-   ОТКРЫТИЯ МАШИНЫ
-*/
-
-const originalOpenCar=openCar;
-
-openCar=function(id){
-
-originalOpenCar(id);
-
-setTimeout(()=>{
-
-const modal=
-document.querySelector("#carModal .modal");
-
-if(
-modal &&
-!document.getElementById("chatSellerButton")
-){
-
-const button=
-document.createElement("button");
-
-button.id="chatSellerButton";
-
-button.className="btn dark";
-
-button.textContent=
-"💬 Написать продавцу";
-
-button.onclick=
-openChat;
-
-const buy=
-document.getElementById("buyButton");
-
-buy.parentNode.insertBefore(
-button,
-buy
+setInterval(
+updateTimer,
+1000
 );
-
-}
-
-},50);
-
-};
 
 </script>
 
