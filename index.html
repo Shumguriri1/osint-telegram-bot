@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
 <title>Шумный перекуп</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 *{
@@ -324,6 +327,10 @@ h2{
     color:#fff;
 }
 
+.input::placeholder{
+    color:#6e747d;
+}
+
 .chat{
     padding:10px;
     margin-top:12px;
@@ -476,6 +483,15 @@ h2{
     font-size:12px;
 }
 
+.online{
+    display:inline-block;
+    width:8px;
+    height:8px;
+    margin-right:5px;
+    border-radius:50%;
+    background:#20c66a;
+}
+
 @media(min-width:600px){
     .cars{
         grid-template-columns:1fr 1fr;
@@ -494,27 +510,25 @@ h2{
 
 <header>
 
-<div class="logo">🚗 ШУМНЫЙ ПЕРЕКУП</div>
+    <div class="logo">🚗 ШУМНЫЙ ПЕРЕКУП</div>
 
-<div class="subtitle">
-Симулятор автомобильного перекупа
-</div>
+    <div class="subtitle">
+        Симулятор автомобильного перекупа
+    </div>
 
-<div class="balance">
+    <div class="balance">
 
-<div class="balance-title">
-БАЛАНС
-</div>
+        <div class="balance-title">БАЛАНС</div>
 
-<div class="balance-money" id="balance">
-€50 000
-</div>
+        <div class="balance-money" id="balance">
+            €50 000
+        </div>
 
-<div class="status-badge" id="headerStatus">
-Базовый
-</div>
+        <div class="status-badge" id="headerStatus">
+            Базовый
+        </div>
 
-</div>
+    </div>
 
 </header>
 
@@ -522,154 +536,158 @@ h2{
 
 <section class="page active" id="marketPage">
 
-<h2>Рынок</h2>
+    <h2>Рынок</h2>
 
-<div class="market-top">
+    <div class="market-top">
 
-<div class="market-day" id="marketDay">
-Рынок
-</div>
+        <div class="market-day" id="marketDay">
+            Рынок
+        </div>
 
-<div class="market-timer" id="marketTimer">
-00:00:00
-</div>
+        <div class="market-timer" id="marketTimer">
+            00:00:00
+        </div>
 
-</div>
+    </div>
 
-<div class="notice">
-Каждый день рынок обновляется.
-На рынке появляются только некоторые автомобили.
-</div>
+    <div class="notice">
+        Каждый день рынок обновляется.
+        На рынке появляются разные автомобили.
+    </div>
 
-<div class="cars" id="marketCars"></div>
+    <div class="cars" id="marketCars"></div>
 
 </section>
 
 
 <section class="page" id="garagePage">
 
-<h2>Гараж</h2>
+    <h2>Гараж</h2>
 
-<div id="garageCars"></div>
+    <div id="garageCars"></div>
 
 </section>
 
 
 <section class="page" id="leaderPage">
 
-<h2>🏆 Таблица лидеров</h2>
+    <h2>🏆 Таблица лидеров</h2>
 
-<div class="notice">
-Живой рейтинг игроков, зарегистрированных в игре.
-</div>
+    <div class="notice">
+        <span class="online"></span>
+        Живой рейтинг всех зарегистрированных игроков.
+    </div>
 
-<div class="leader-tabs">
+    <div class="leader-tabs">
 
-<button class="leader-tab active"
-id="tabMoney"
-onclick="setLeaderType('money')">
-💰 Деньги
-</button>
+        <button
+            class="leader-tab active"
+            id="tabMoney"
+            onclick="setLeaderType('money')">
+            💰 Деньги
+        </button>
 
-<button class="leader-tab"
-id="tabProperty"
-onclick="setLeaderType('property')">
-🏠 Имущество
-</button>
+        <button
+            class="leader-tab"
+            id="tabProperty"
+            onclick="setLeaderType('property')">
+            🏠 Имущество
+        </button>
 
-<button class="leader-tab"
-id="tabStatus"
-onclick="setLeaderType('status')">
-👑 Статус
-</button>
+        <button
+            class="leader-tab"
+            id="tabStatus"
+            onclick="setLeaderType('status')">
+            👑 Статус
+        </button>
 
-</div>
+    </div>
 
-<div class="leader-list" id="leaderList"></div>
+    <div id="leaderList" class="leader-list"></div>
 
 </section>
 
 
 <section class="page" id="profilePage">
 
-<h2>Профиль</h2>
+    <h2>Профиль</h2>
 
-<div class="profile-card">
+    <div class="profile-card">
 
-<div class="profile-row">
-<div class="label">ИМЯ</div>
-<div class="value" id="profileName">—</div>
-</div>
+        <div class="profile-row">
+            <div class="label">ИМЯ</div>
+            <div class="value" id="profileName">—</div>
+        </div>
 
-<div class="profile-row">
-<div class="label">ID</div>
-<div class="value" id="profileId">—</div>
-</div>
+        <div class="profile-row">
+            <div class="label">ID</div>
+            <div class="value" id="profileId">—</div>
+        </div>
 
-<div class="profile-row">
-<div class="label">СТРАНА</div>
-<div class="value" id="profileCountry">—</div>
-</div>
+        <div class="profile-row">
+            <div class="label">СТРАНА</div>
+            <div class="value" id="profileCountry">—</div>
+        </div>
 
-<div class="profile-row">
-<div class="label">СТАТУС</div>
-<div class="value" id="profileStatus">Базовый</div>
-</div>
+        <div class="profile-row">
+            <div class="label">СТАТУС</div>
+            <div class="value" id="profileStatus">Базовый</div>
+        </div>
 
-<div class="profile-row">
-<div class="label">ПОТРАЧЕНО ВСЕГО</div>
-<div class="value" id="profileSpent">€0</div>
-</div>
+        <div class="profile-row">
+            <div class="label">ПОТРАЧЕНО ВСЕГО</div>
+            <div class="value" id="profileSpent">€0</div>
+        </div>
 
-<div class="profile-row">
-<div class="label">ИМУЩЕСТВО</div>
-<div class="value" id="profileProperty">€0</div>
-</div>
+        <div class="profile-row">
+            <div class="label">ИМУЩЕСТВО</div>
+            <div class="value" id="profileProperty">€0</div>
+        </div>
 
-<div class="profile-row">
-<div class="label">ТЕЛЕФОН</div>
-<div class="value" id="profilePhone">Не куплен</div>
-</div>
+        <div class="profile-row">
+            <div class="label">ТЕЛЕФОН</div>
+            <div class="value" id="profilePhone">Не куплен</div>
+        </div>
 
-</div>
+    </div>
 
-<h2 style="margin-top:22px">
-📈 Прогресс статуса
-</h2>
+    <h2 style="margin-top:22px">
+        📈 Прогресс статуса
+    </h2>
 
-<div class="notice" id="statusProgress"></div>
+    <div class="notice" id="statusProgress"></div>
 
-<div class="status-list">
+    <div class="status-list">
 
-<div class="status-item" id="statusBasic">
-<div class="status-name">Базовый</div>
-<div class="status-cost">Старт</div>
-</div>
+        <div class="status-item" id="statusBasic">
+            <div class="status-name">Базовый</div>
+            <div class="status-cost">Старт</div>
+        </div>
 
-<div class="status-item" id="statusNormal">
-<div class="status-name">Обычный</div>
-<div class="status-cost">€100 000</div>
-</div>
+        <div class="status-item" id="statusNormal">
+            <div class="status-name">Обычный</div>
+            <div class="status-cost">€100 000</div>
+        </div>
 
-<div class="status-item" id="statusMedium">
-<div class="status-name">Медиум</div>
-<div class="status-cost">€500 000</div>
-</div>
+        <div class="status-item" id="statusMedium">
+            <div class="status-name">Медиум</div>
+            <div class="status-cost">€500 000</div>
+        </div>
 
-<div class="status-item" id="statusVip">
-<div class="status-name">VIP</div>
-<div class="status-cost">€10 000 000</div>
-</div>
+        <div class="status-item" id="statusVip">
+            <div class="status-name">VIP</div>
+            <div class="status-cost">€10 000 000</div>
+        </div>
 
-</div>
+    </div>
 
-<button class="btn dark" onclick="buyPhone()">
-📱 Купить номер
-</button>
+    <button class="btn dark" onclick="buyPhone()">
+        📱 Купить номер
+    </button>
 
-<button class="btn dark" onclick="openModerLogin()">
-🔐 Moder
-</button>
+    <button class="btn dark" onclick="openModerLogin()">
+        🔐 Moder
+    </button>
 
 </section>
 
@@ -678,252 +696,248 @@ onclick="setLeaderType('status')">
 
 <div class="bottom">
 
-<div class="bottom-inner">
+    <div class="bottom-inner">
 
-<button class="nav active"
-onclick="showPage('marketPage',this)">
-<span class="nav-icon">🚘</span>
-Рынок
-</button>
+        <button class="nav active" onclick="showPage('marketPage',this)">
+            <span class="nav-icon">🚘</span>
+            Рынок
+        </button>
 
-<button class="nav"
-onclick="showPage('garagePage',this)">
-<span class="nav-icon">🏠</span>
-Гараж
-</button>
+        <button class="nav" onclick="showPage('garagePage',this)">
+            <span class="nav-icon">🏠</span>
+            Гараж
+        </button>
 
-<button class="nav"
-onclick="showPage('leaderPage',this)">
-<span class="nav-icon">🏆</span>
-Лидеры
-</button>
+        <button class="nav" onclick="showPage('leaderPage',this)">
+            <span class="nav-icon">🏆</span>
+            Лидеры
+        </button>
 
-<button class="nav"
-onclick="showPage('profilePage',this)">
-<span class="nav-icon">👤</span>
-Профиль
-</button>
+        <button class="nav" onclick="showPage('profilePage',this)">
+            <span class="nav-icon">👤</span>
+            Профиль
+        </button>
+
+    </div>
 
 </div>
 
 </div>
 
-</div>
 
+<!-- РЕГИСТРАЦИЯ -->
 
 <div class="modal-bg" id="registerModal">
 
-<div class="modal">
+    <div class="modal">
 
-<h2>Добро пожаловать 👋</h2>
+        <h2>Добро пожаловать 👋</h2>
 
-<div class="notice">
+        <div class="notice">
 
-Создай своего перекупа.
+            Создай своего перекупа.
 
-<br><br>
+            <br><br>
 
-Стартовый капитал:
-<b>€50 000</b>
+            Стартовый капитал:
+            <b>€50 000</b>
 
-<br><br>
+            <br><br>
 
-Статус:
-<b>Базовый</b>
+            Статус:
+            <b>Базовый</b>
+
+        </div>
+
+        <input
+            class="input"
+            id="regName"
+            placeholder="Введите имя"
+            maxlength="30">
+
+        <select class="input" id="regCountry">
+
+            <option value="">
+                Выберите страну
+            </option>
+
+            <option value="Беларусь">
+                🇧🇾 Беларусь
+            </option>
+
+            <option value="Россия">
+                🇷🇺 Россия
+            </option>
+
+        </select>
+
+        <button class="btn" onclick="register()">
+            Начать игру
+        </button>
+
+    </div>
 
 </div>
 
-<input
-class="input"
-id="regName"
-placeholder="Введите имя"
-maxlength="30">
 
-<select class="input" id="regCountry">
-
-<option value="">Выберите страну</option>
-
-<option value="Беларусь">
-🇧🇾 Беларусь
-</option>
-
-<option value="Россия">
-🇷🇺 Россия
-</option>
-
-</select>
-
-<button class="btn" onclick="register()">
-Начать игру
-</button>
-
-</div>
-
-</div>
-
+<!-- МАШИНА -->
 
 <div class="modal-bg" id="carModal">
 
-<div class="modal">
+    <div class="modal">
 
-<h2 id="modalName">Автомобиль</h2>
+        <h2 id="modalName">Автомобиль</h2>
 
-<img id="modalImage"
-class="modal-img"
-alt="Автомобиль">
+        <img id="modalImage" class="modal-img" alt="Автомобиль">
 
-<div class="notice" id="modalInfo"></div>
+        <div class="notice" id="modalInfo"></div>
 
-<div class="offer-box">
+        <div class="offer-box">
 
-<div class="small">
-ПРЕДЛОЖИТЬ СВОЮ ЦЕНУ
-</div>
+            <div class="small">
+                ПРЕДЛОЖИТЬ СВОЮ ЦЕНУ
+            </div>
 
-<input
-class="input"
-id="offerInput"
-type="number"
-inputmode="numeric"
-placeholder="Например 35000">
+            <input
+                class="input"
+                id="offerInput"
+                type="number"
+                inputmode="numeric"
+                placeholder="Например 35000">
 
-<button class="btn" onclick="makeOffer()">
-💬 Торговаться
-</button>
+            <button class="btn" onclick="makeOffer()">
+                💬 Торговаться
+            </button>
 
-</div>
+        </div>
 
-<button class="btn dark" onclick="openChat()">
-💬 Написать продавцу
-</button>
+        <button class="btn dark" onclick="openChat()">
+            💬 Написать продавцу
+        </button>
 
-<button class="btn green" id="buyButton">
-Купить
-</button>
+        <button class="btn green" id="buyButton">
+            Купить
+        </button>
 
-<button class="btn dark"
-onclick="closeModal('carModal')">
-Закрыть
-</button>
+        <button class="btn dark" onclick="closeModal('carModal')">
+            Закрыть
+        </button>
 
-</div>
+    </div>
 
 </div>
 
+
+<!-- ЧАТ -->
 
 <div class="modal-bg" id="chatModal">
 
-<div class="modal">
+    <div class="modal">
 
-<h2 id="chatTitle">💬 Продавец</h2>
+        <h2 id="chatTitle">💬 Продавец</h2>
 
-<div class="chat" id="chatMessages"></div>
+        <div class="chat" id="chatMessages"></div>
 
-<div class="offer-box">
+        <div class="offer-box">
 
-<div class="small">
-ТВОЁ ПРЕДЛОЖЕНИЕ
+            <div class="small">
+                ТВОЁ ПРЕДЛОЖЕНИЕ
+            </div>
+
+            <input
+                class="input"
+                id="chatOffer"
+                type="number"
+                inputmode="numeric"
+                placeholder="Цена">
+
+            <button class="btn" onclick="sendOffer()">
+                Отправить
+            </button>
+
+        </div>
+
+        <button class="btn green" onclick="acceptDeal()">
+            🤝 Договорились
+        </button>
+
+        <button class="btn dark" onclick="closeModal('chatModal')">
+            Закрыть
+        </button>
+
+    </div>
+
 </div>
 
-<input
-class="input"
-id="chatOffer"
-type="number"
-inputmode="numeric"
-placeholder="Цена">
 
-<button class="btn" onclick="sendOffer()">
-Отправить
-</button>
-
-</div>
-
-<button class="btn green" onclick="acceptDeal()">
-🤝 Договорились
-</button>
-
-<button class="btn dark"
-onclick="closeModal('chatModal')">
-Закрыть
-</button>
-
-</div>
-
-</div>
-
+<!-- MODER LOGIN -->
 
 <div class="modal-bg" id="moderLoginModal">
 
-<div class="modal">
+    <div class="modal">
 
-<h2>🔐 Moder</h2>
+        <h2>🔐 Moder</h2>
 
-<input
-class="input"
-id="moderPassword"
-type="password"
-placeholder="Пароль">
+        <input
+            class="input"
+            id="moderPassword"
+            type="password"
+            placeholder="Пароль">
 
-<button class="btn" onclick="moderLogin()">
-Войти
-</button>
+        <button class="btn" onclick="moderLogin()">
+            Войти
+        </button>
 
-<button class="btn dark"
-onclick="closeModal('moderLoginModal')">
-Отмена
-</button>
+        <button class="btn dark" onclick="closeModal('moderLoginModal')">
+            Отмена
+        </button>
+
+    </div>
 
 </div>
 
-</div>
 
+<!-- MODER -->
 
 <div class="modal-bg" id="moderModal">
 
-<div class="modal">
+    <div class="modal">
 
-<h2>🛠 Moder</h2>
+        <h2>🛠 Moder</h2>
 
-<div class="notice">
-Панель администратора
-</div>
+        <div class="notice">
+            Панель администратора
+        </div>
 
-<button class="btn green"
-onclick="giveMoney(100000)">
-💰 Выдать €100 000
-</button>
+        <button class="btn green" onclick="giveMoney(100000)">
+            💰 Выдать €100 000
+        </button>
 
-<button class="btn green"
-onclick="giveMoney(1000000)">
-💰 Выдать €1 000 000
-</button>
+        <button class="btn green" onclick="giveMoney(1000000)">
+            💰 Выдать €1 000 000
+        </button>
 
-<button class="btn dark"
-onclick="resetBalance()">
-🔄 Обнулить баланс
-</button>
+        <button class="btn dark" onclick="resetBalance()">
+            🔄 Обнулить баланс
+        </button>
 
-<button class="btn dark"
-onclick="moderCar()">
-🚗 Выдать машину
-</button>
+        <button class="btn dark" onclick="moderCar()">
+            🚗 Выдать машину
+        </button>
 
-<button class="btn dark"
-onclick="moderPhone()">
-📱 Выдать номер
-</button>
+        <button class="btn dark" onclick="moderPhone()">
+            📱 Выдать номер
+        </button>
 
-<button class="btn green"
-onclick="giveMyVipPhone()">
-👑 Мой VIP-номер
-</button>
+        <button class="btn green" onclick="giveMyVipPhone()">
+            👑 Мой VIP-номер
+        </button>
 
-<button class="btn red"
-onclick="closeModal('moderModal')">
-Закрыть
-</button>
+        <button class="btn red" onclick="closeModal('moderModal')">
+            Закрыть
+        </button>
 
-</div>
+    </div>
 
 </div>
 
@@ -931,7 +945,7 @@ onclick="closeModal('moderModal')">
 <script>
 
 /* =========================================================
-SUPABASE
+   SUPABASE
 ========================================================= */
 
 const SUPABASE_URL =
@@ -940,39 +954,15 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_8VOvYFqWyCahwgxpsJ3a9A_En9WHWYv";
 
-let supabaseClient = null;
-
-async function initSupabase(){
-
-    try{
-
-        if(
-            window.supabase &&
-            typeof window.supabase.createClient === "function"
-        ){
-
-            supabaseClient =
-                window.supabase.createClient(
-                    SUPABASE_URL,
-                    SUPABASE_KEY
-                );
-
-        }
-
-    }catch(error){
-
-        console.error(
-            "Supabase error:",
-            error
-        );
-
-    }
-
-}
+const supabase =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
 /* =========================================================
-МАШИНЫ
+   МАШИНЫ
 ========================================================= */
 
 const cars = [
@@ -1071,7 +1061,7 @@ image:"https://r44performance.com/cdn/shop/files/BMW-F82-M4-Exterior-Styling-MOB
 
 
 /* =========================================================
-СТАТУСЫ
+   СТАТУСЫ
 ========================================================= */
 
 const STATUS_LEVELS = [
@@ -1104,7 +1094,7 @@ level:3
 
 
 /* =========================================================
-ПЕРЕМЕННЫЕ
+   ПЕРЕМЕННЫЕ
 ========================================================= */
 
 let player = null;
@@ -1115,608 +1105,553 @@ let selectedPrice = 0;
 
 let leaderType = "money";
 
-
-/* =========================================================
-ID
-========================================================= */
-
-function generateId(){
-
-    let number =
-        Number(
-            localStorage.getItem(
-                "shum_id_counter"
-            ) || "0"
-        );
-
-    number++;
-
-    localStorage.setItem(
-        "shum_id_counter",
-        String(number)
-    );
-
-    return(
-        "A"+
-        String(number).padStart(4,"0")+
-        "AA"
-    );
-
-}
+let leaderboardChannel = null;
 
 
 /* =========================================================
-СТАТУС
-========================================================= */
-
-function getStatus(spent){
-
-    let current =
-        STATUS_LEVELS[0];
-
-    for(
-        const status of STATUS_LEVELS
-    ){
-
-        if(
-            Number(spent) >=
-            status.spent
-        ){
-
-            current = status;
-
-        }
-
-    }
-
-    return current;
-
-}
-
-
-/* =========================================================
-ДЕНЬ
-========================================================= */
-
-function getDayKey(){
-
-    const d = new Date();
-
-    return(
-        d.getFullYear()+
-        "-"+
-        String(d.getMonth()+1).padStart(2,"0")+
-        "-"+
-        String(d.getDate()).padStart(2,"0")
-    );
-
-}
-
-
-/* =========================================================
-RANDOM
-========================================================= */
-
-function seededRandom(seed){
-
-    const x =
-        Math.sin(seed)*10000;
-
-    return(
-        x-Math.floor(x)
-    );
-
-}
-
-
-/* =========================================================
-ЕЖЕДНЕВНЫЙ РЫНОК
-========================================================= */
-
-function getDailyMarket(){
-
-    const key =
-        getDayKey();
-
-    let seed = 0;
-
-    for(
-        let i=0;
-        i<key.length;
-        i++
-    ){
-
-        seed +=
-            key.charCodeAt(i)*
-            (i+1);
-
-    }
-
-    let shuffled =
-        [...cars];
-
-    for(
-        let i=shuffled.length-1;
-        i>0;
-        i--
-    ){
-
-        const r =
-            Math.floor(
-                seededRandom(
-                    seed+i*37
-                )*
-                (i+1)
-            );
-
-        [
-            shuffled[i],
-            shuffled[r]
-        ] =
-        [
-            shuffled[r],
-            shuffled[i]
-        ];
-
-    }
-
-    const count =
-        5+
-        Math.floor(
-            seededRandom(
-                seed+500
-            )*4
-        );
-
-    return shuffled
-        .slice(0,count)
-        .map(car=>{
-
-            const variation =
-                0.87+
-                seededRandom(
-                    seed+car.id*73
-                )*0.23;
-
-            const price =
-                Math.round(
-                    car.base*
-                    variation/
-                    100
-                )*100;
-
-            const year =
-                2014+
-                Math.floor(
-                    seededRandom(
-                        seed+car.id*91
-                    )*11
-                );
-
-            const mileage =
-                Math.round(
-                    (
-                        30000+
-                        seededRandom(
-                            seed+car.id*113
-                        )*
-                        150000
-                    )/1000
-                )*1000;
-
-            const state =
-                seededRandom(
-                    seed+car.id*137
-                );
-
-            let condition;
-
-            if(state>.8){
-                condition="Отличное";
-            }
-            else if(state>.45){
-                condition="Хорошее";
-            }
-            else{
-                condition="Есть нюансы";
-            }
-
-            return{
-                ...car,
-                marketPrice:price,
-                sellerMin:
-                    Math.round(
-                        price*.93/100
-                    )*100,
-                year,
-                mileage,
-                condition
-            };
-
-        });
-
-}
-
-
-/* =========================================================
-ЗАГРУЗКА
-========================================================= */
-
-function loadPlayer(){
-
-    try{
-
-        const saved =
-            localStorage.getItem(
-                "shum_player_v8"
-            );
-
-        if(!saved){
-            return null;
-        }
-
-        const data =
-            JSON.parse(saved);
-
-        if(
-            !data ||
-            typeof data!=="object" ||
-            !data.id
-        ){
-
-            return null;
-
-        }
-
-        if(!Array.isArray(data.garage)){
-            data.garage=[];
-        }
-
-        if(
-            typeof data.balance!=="number"
-        ){
-
-            data.balance=50000;
-
-        }
-
-        if(
-            typeof data.totalSpent!=="number"
-        ){
-
-            data.totalSpent=0;
-
-        }
-
-        if(!data.phone){
-            data.phone=null;
-        }
-
-        if(!data.country){
-            data.country="Беларусь";
-        }
-
-        data.status =
-            getStatus(
-                data.totalSpent
-            ).name;
-
-        return data;
-
-    }catch(error){
-
-        console.error(
-            "Ошибка загрузки:",
-            error
-        );
-
-        return null;
-
-    }
-
-}
-
-
-/* =========================================================
-СОХРАНЕНИЕ ЛОКАЛЬНО
-========================================================= */
-
-function saveLocal(){
-
-    if(!player){
-        return;
-    }
-
-    localStorage.setItem(
-        "shum_player_v8",
-        JSON.stringify(player)
-    );
-
-}
-
-
-/* =========================================================
-SUPABASE SAVE
-========================================================= */
-
-async function savePlayerToSupabase(){
-
-    if(
-        !player ||
-        !supabaseClient
-    ){
-
-        return;
-
-    }
-
-    try{
-
-        const data = {
-
-            id:String(player.id),
-
-            name:String(
-                player.name || "Игрок"
-            ),
-
-            country:String(
-                player.country || "Беларусь"
-            ),
-
-            balance:Number(
-                player.balance
-            ) || 0,
-
-            total_spent:Number(
-                player.totalSpent
-            ) || 0,
-
-            total_property:Number(
-                calculateProperty()
-            ) || 0,
-
-            status:String(
-                player.status || "Базовый"
-            ),
-
-            status_level:Number(
-                getStatus(
-                    player.totalSpent
-                ).level
-            ) || 0,
-
-            phone:
-                player.phone || null,
-
-            garage:
-                Array.isArray(player.garage)
-                ?
-                player.garage
-                :
-                []
-
-        };
-
-        const {error} =
-            await supabaseClient
-            .from("players")
-            .upsert(
-                data,
-                {
-                    onConflict:"id"
-                }
-            );
-
-        if(error){
-
-            console.error(
-                "Supabase save:",
-                error
-            );
-
-        }
-
-    }catch(error){
-
-        console.error(
-            "Supabase save:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-ОБЩЕЕ СОХРАНЕНИЕ
-========================================================= */
-
-function save(){
-
-    saveLocal();
-
-    savePlayerToSupabase();
-
-}
-
-
-/* =========================================================
-РЕГИСТРАЦИЯ
-========================================================= */
-
-function register(){
-
-    const name =
-        document
-        .getElementById("regName")
-        .value
-        .trim();
-
-    const country =
-        document
-        .getElementById("regCountry")
-        .value;
-
-    if(!name){
-
-        alert("Введите имя.");
-
-        return;
-
-    }
-
-    if(!country){
-
-        alert("Выберите страну.");
-
-        return;
-
-    }
-
-    player = {
-
-        id:generateId(),
-
-        name:name,
-
-        country:country,
-
-        balance:50000,
-
-        totalSpent:0,
-
-        totalProperty:0,
-
-        status:"Базовый",
-
-        phone:null,
-
-        garage:[]
-
-    };
-
-    save();
-
-    closeModal(
-        "registerModal"
-    );
-
-    update();
-
-    alert(
-        "Добро пожаловать, "+
-        name+
-        "!\n\n"+
-        "ID: "+
-        player.id+
-        "\n"+
-        "Баланс: €50 000"+
-        "\n"+
-        "Статус: Базовый"
-    );
-
-}
-
-
-/* =========================================================
-ДЕНЬГИ
+   ФОРМАТ ДЕНЕГ
 ========================================================= */
 
 function money(value){
 
-    return(
-        "€"+
-        Number(value || 0)
-        .toLocaleString("ru-RU")
-    );
+return "€" +
+Number(value || 0)
+.toLocaleString("ru-RU");
 
 }
 
 
 /* =========================================================
-СТАТУС UPDATE
+   ID
 ========================================================= */
+
+function generateId(){
+
+let number =
+Number(
+localStorage.getItem("shum_id_counter") || "0"
+);
+
+number++;
+
+localStorage.setItem(
+"shum_id_counter",
+String(number)
+);
+
+return "A" +
+String(number).padStart(4,"0") +
+"AA";
+
+}
+
+
+/* =========================================================
+   СТАТУС
+========================================================= */
+
+function getStatus(spent){
+
+let current = STATUS_LEVELS[0];
+
+for(const status of STATUS_LEVELS){
+
+if(Number(spent) >= status.spent){
+current = status;
+}
+
+}
+
+return current;
+
+}
+
 
 function updateStatus(){
 
-    if(!player){
-        return;
-    }
+if(!player){
+return;
+}
 
-    const oldStatus =
-        player.status;
-
-    const newStatus =
-        getStatus(
-            player.totalSpent
-        );
-
-    player.status =
-        newStatus.name;
-
-    if(
-        oldStatus &&
-        oldStatus!==newStatus.name
-    ){
-
-        setTimeout(()=>{
-
-            alert(
-                "🎉 НОВЫЙ СТАТУС!\n\n"+
-                oldStatus+
-                " → "+
-                newStatus.name+
-                "\n\n"+
-                "Потрачено: "+
-                money(
-                    player.totalSpent
-                )
-            );
-
-        },100);
-
-    }
+player.status =
+getStatus(player.totalSpent).name;
 
 }
 
 
 /* =========================================================
-РЫНОК
+   LOCAL SAVE
+========================================================= */
+
+function saveLocal(){
+
+if(!player){
+return;
+}
+
+localStorage.setItem(
+"shum_player_v7",
+JSON.stringify(player)
+);
+
+}
+
+
+/* =========================================================
+   LOCAL LOAD
+========================================================= */
+
+function loadLocal(){
+
+try{
+
+const saved =
+localStorage.getItem(
+"shum_player_v7"
+);
+
+if(!saved){
+return null;
+}
+
+const data =
+JSON.parse(saved);
+
+if(!data || !data.id){
+return null;
+}
+
+if(!Array.isArray(data.garage)){
+data.garage = [];
+}
+
+if(typeof data.balance !== "number"){
+data.balance = 50000;
+}
+
+if(typeof data.totalSpent !== "number"){
+data.totalSpent = 0;
+}
+
+if(!data.phone){
+data.phone = null;
+}
+
+if(!data.country){
+data.country = "Беларусь";
+}
+
+updateStatusObject(data);
+
+return data;
+
+}catch(error){
+
+console.error(error);
+
+return null;
+
+}
+
+}
+
+
+function updateStatusObject(data){
+
+data.status =
+getStatus(
+Number(data.totalSpent) || 0
+).name;
+
+}
+
+
+/* =========================================================
+   ИМУЩЕСТВО
+========================================================= */
+
+function calculateProperty(){
+
+if(!player){
+return 0;
+}
+
+return player.garage.reduce(
+(sum,car)=>{
+
+return sum +
+Number(
+car.repaired
+? car.sell
+: car.purchasePrice
+);
+
+},
+0
+);
+
+}
+
+
+/* =========================================================
+   SUPABASE SAVE
+========================================================= */
+
+async function saveToSupabase(){
+
+if(!player){
+return;
+}
+
+updateStatus();
+
+const data = {
+
+id:String(player.id),
+
+name:String(player.name || "Игрок"),
+
+country:String(player.country || "Беларусь"),
+
+balance:Math.round(
+Number(player.balance) || 0
+),
+
+total_spent:Math.round(
+Number(player.totalSpent) || 0
+),
+
+total_property:Math.round(
+Number(calculateProperty()) || 0
+),
+
+status:String(
+player.status || "Базовый"
+),
+
+status_level:Number(
+getStatus(player.totalSpent).level
+),
+
+phone:player.phone || null,
+
+garage:Array.isArray(player.garage)
+? player.garage
+:[],
+
+updated_at:new Date().toISOString()
+
+};
+
+try{
+
+const {error} =
+await supabase
+.from("players")
+.upsert(
+data,
+{
+onConflict:"id"
+}
+);
+
+if(error){
+
+console.error(
+"Supabase save error:",
+error
+);
+
+return false;
+
+}
+
+return true;
+
+}catch(error){
+
+console.error(
+"Supabase error:",
+error
+);
+
+return false;
+
+}
+
+}
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+function save(){
+
+saveLocal();
+
+saveToSupabase();
+
+}
+
+
+/* =========================================================
+   REGISTRATION
+========================================================= */
+
+function register(){
+
+const name =
+document
+.getElementById("regName")
+.value
+.trim();
+
+const country =
+document
+.getElementById("regCountry")
+.value;
+
+if(!name){
+
+alert("Введите имя.");
+
+return;
+
+}
+
+if(!country){
+
+alert("Выберите страну.");
+
+return;
+
+}
+
+player = {
+
+id:generateId(),
+
+name:name,
+
+country:country,
+
+status:"Базовый",
+
+balance:50000,
+
+phone:null,
+
+garage:[],
+
+totalSpent:0
+
+};
+
+saveLocal();
+
+closeModal("registerModal");
+
+update();
+
+saveToSupabase();
+
+alert(
+"Добро пожаловать, " +
+name +
+"!\n\n" +
+"ID: " +
+player.id +
+"\n" +
+"Баланс: €50 000\n" +
+"Статус: Базовый"
+);
+
+}
+
+
+/* =========================================================
+   MARKET DAY
+========================================================= */
+
+function getDayKey(){
+
+const d = new Date();
+
+return d.getFullYear() +
+"-" +
+String(d.getMonth()+1).padStart(2,"0") +
+"-" +
+String(d.getDate()).padStart(2,"0");
+
+}
+
+
+function seededRandom(seed){
+
+const x = Math.sin(seed) * 10000;
+
+return x - Math.floor(x);
+
+}
+
+
+function getDailyMarket(){
+
+const key = getDayKey();
+
+let seed = 0;
+
+for(let i=0;i<key.length;i++){
+
+seed +=
+key.charCodeAt(i) *
+(i+1);
+
+}
+
+let shuffled = [...cars];
+
+for(
+let i=shuffled.length-1;
+i>0;
+i--
+){
+
+const r =
+Math.floor(
+seededRandom(
+seed+i*37
+) *
+(i+1)
+);
+
+[
+shuffled[i],
+shuffled[r]
+] =
+[
+shuffled[r],
+shuffled[i]
+];
+
+}
+
+const count =
+5 +
+Math.floor(
+seededRandom(seed+500) * 4
+);
+
+return shuffled
+.slice(0,count)
+.map(car=>{
+
+const variation =
+0.87 +
+seededRandom(
+seed+car.id*73
+) *
+0.23;
+
+const price =
+Math.round(
+car.base *
+variation /
+100
+) * 100;
+
+const year =
+2014 +
+Math.floor(
+seededRandom(
+seed+car.id*91
+) * 11
+);
+
+const mileage =
+Math.round(
+(
+30000 +
+seededRandom(
+seed+car.id*113
+) *
+150000
+) / 1000
+) * 1000;
+
+const state =
+seededRandom(
+seed+car.id*137
+);
+
+let condition;
+
+if(state > .8){
+condition = "Отличное";
+}
+else if(state > .45){
+condition = "Хорошее";
+}
+else{
+condition = "Есть нюансы";
+}
+
+return {
+
+...car,
+
+marketPrice:price,
+
+sellerMin:
+Math.round(
+price*.93/100
+)*100,
+
+year:year,
+
+mileage:mileage,
+
+condition:condition
+
+};
+
+});
+
+}
+
+
+/* =========================================================
+   MARKET
 ========================================================= */
 
 function renderMarket(){
 
-    const market =
-        getDailyMarket();
+const market =
+getDailyMarket();
 
-    const box =
-        document.getElementById(
-            "marketCars"
-        );
+const box =
+document.getElementById(
+"marketCars"
+);
 
-    box.innerHTML="";
+box.innerHTML = "";
 
-    document.getElementById(
-        "marketDay"
-    ).textContent =
-        "Рынок • "+
-        new Date()
-        .toLocaleDateString(
-            "ru-RU"
-        );
+document.getElementById(
+"marketDay"
+).textContent =
+"Рынок • " +
+new Date()
+.toLocaleDateString("ru-RU");
 
-    market.forEach(car=>{
+market.forEach(car=>{
 
-        const element =
-            document.createElement(
-                "div"
-            );
+const element =
+document.createElement("div");
 
-        element.className="car";
+element.className = "car";
 
-        element.innerHTML=`
+element.innerHTML = `
 
 <img
 class="car-image"
@@ -1738,8 +1673,7 @@ ${escapeHtml(car.name)}
 <br>
 
 Пробег:
-${car.mileage.toLocaleString("ru-RU")}
-км
+${car.mileage.toLocaleString("ru-RU")} км
 
 <br>
 
@@ -1749,16 +1683,11 @@ ${car.condition}
 </div>
 
 <div class="market-price">
-
-Средняя цена:
-${money(car.base)}
-
+Средняя цена: ${money(car.base)}
 </div>
 
 <div class="price">
-
 ${money(car.marketPrice)}
-
 </div>
 
 <button
@@ -1773,95 +1702,87 @@ onclick="openCar(${car.id})">
 
 `;
 
-        box.appendChild(
-            element
-        );
+box.appendChild(element);
 
-    });
+});
 
 }
 
 
 /* =========================================================
-ТАЙМЕР
+   TIMER
 ========================================================= */
 
 function updateTimer(){
 
-    const now =
-        new Date();
+const now = new Date();
 
-    const next =
-        new Date(now);
+const next = new Date(now);
 
-    next.setHours(
-        24,0,0,0
-    );
+next.setHours(
+24,0,0,0
+);
 
-    const diff =
-        next-now;
+const diff = next-now;
 
-    const h =
-        Math.floor(
-            diff/3600000
-        );
+const h =
+Math.floor(
+diff/3600000
+);
 
-    const m =
-        Math.floor(
-            (diff%3600000)/60000
-        );
+const m =
+Math.floor(
+(diff%3600000)/60000
+);
 
-    const s =
-        Math.floor(
-            (diff%60000)/1000
-        );
+const s =
+Math.floor(
+(diff%60000)/1000
+);
 
-    document.getElementById(
-        "marketTimer"
-    ).textContent =
-
-        "Новинки через "+
-        String(h).padStart(2,"0")+
-        ":"+
-        String(m).padStart(2,"0")+
-        ":"+
-        String(s).padStart(2,"0");
+document.getElementById(
+"marketTimer"
+).textContent =
+"Новинки через " +
+String(h).padStart(2,"0") +
+":" +
+String(m).padStart(2,"0") +
+":" +
+String(s).padStart(2,"0");
 
 }
 
 
 /* =========================================================
-МАШИНА
+   OPEN CAR
 ========================================================= */
 
 function openCar(id){
 
-    selectedCar =
-        getDailyMarket()
-        .find(
-            c=>c.id===id
-        );
+selectedCar =
+getDailyMarket()
+.find(c=>c.id===id);
 
-    if(!selectedCar){
-        return;
-    }
+if(!selectedCar){
+return;
+}
 
-    selectedPrice =
-        selectedCar.marketPrice;
+selectedPrice =
+selectedCar.marketPrice;
 
-    document.getElementById(
-        "modalName"
-    ).textContent =
-        selectedCar.name;
+document.getElementById(
+"modalName"
+).textContent =
+selectedCar.name;
 
-    document.getElementById(
-        "modalImage"
-    ).src =
-        selectedCar.image;
+document.getElementById(
+"modalImage"
+).src =
+selectedCar.image;
 
-    document.getElementById(
-        "modalInfo"
-    ).innerHTML=`
+document.getElementById(
+"modalInfo"
+).innerHTML = `
 
 Год:
 <b>${selectedCar.year}</b>
@@ -1870,8 +1791,7 @@ function openCar(id){
 
 Пробег:
 <b>
-${selectedCar.mileage.toLocaleString("ru-RU")}
-км
+${selectedCar.mileage.toLocaleString("ru-RU")} км
 </b>
 
 <br><br>
@@ -1891,66 +1811,62 @@ ${selectedCar.mileage.toLocaleString("ru-RU")}
 
 `;
 
-    document.getElementById(
-        "buyButton"
-    ).textContent =
-        "Купить за "+
-        money(selectedPrice);
+document.getElementById(
+"buyButton"
+).textContent =
+"Купить за " +
+money(selectedPrice);
 
-    document.getElementById(
-        "buyButton"
-    ).onclick =
-        ()=>buyCar(selectedPrice);
+document.getElementById(
+"buyButton"
+).onclick =
+()=>{
+buyCar(selectedPrice);
+};
 
-    document.getElementById(
-        "offerInput"
-    ).value="";
+document.getElementById(
+"offerInput"
+).value = "";
 
-    document.getElementById(
-        "carModal"
-    )
-    .classList
-    .add("show");
+document.getElementById(
+"carModal"
+).classList.add("show");
 
 }
 
 
 /* =========================================================
-ТОРГ
+   OFFER
 ========================================================= */
 
 function makeOffer(){
 
-    if(!selectedCar){
-        return;
-    }
+if(!selectedCar){
+return;
+}
 
-    const value =
-        Number(
-            document.getElementById(
-                "offerInput"
-            ).value
-        );
+const value =
+Number(
+document.getElementById(
+"offerInput"
+).value
+);
 
-    if(!value){
+if(!value){
 
-        alert("Введите сумму.");
+alert("Введите сумму.");
 
-        return;
+return;
 
-    }
+}
 
-    if(
-        value >=
-        selectedCar.sellerMin
-    ){
+if(value >= selectedCar.sellerMin){
 
-        selectedPrice =
-            value;
+selectedPrice = value;
 
-        document.getElementById(
-            "modalInfo"
-        ).innerHTML += `
+document.getElementById(
+"modalInfo"
+).innerHTML += `
 
 <br><br>
 
@@ -1958,28 +1874,26 @@ function makeOffer(){
 
 <br>
 
-Ладно,
-договорились за
+Ладно, договорились за
 ${money(value)}.
 
 `;
 
-    }else{
+}else{
 
-        const counter =
-            Math.round(
-                (
-                    value+
-                    selectedCar.sellerMin
-                )/2/100
-            )*100;
+const counter =
+Math.round(
+(
+value +
+selectedCar.sellerMin
+) / 2 / 100
+) * 100;
 
-        selectedPrice =
-            counter;
+selectedPrice = counter;
 
-        document.getElementById(
-            "modalInfo"
-        ).innerHTML += `
+document.getElementById(
+"modalInfo"
+).innerHTML += `
 
 <br><br>
 
@@ -1994,36 +1908,35 @@ ${money(counter)}.
 
 `;
 
-    }
+}
 
-    document.getElementById(
-        "buyButton"
-    ).textContent =
-        "Купить за "+
-        money(selectedPrice);
+document.getElementById(
+"buyButton"
+).textContent =
+"Купить за " +
+money(selectedPrice);
 
 }
 
 
 /* =========================================================
-ЧАТ
+   CHAT
 ========================================================= */
 
 function openChat(){
 
-    if(!selectedCar){
-        return;
-    }
+if(!selectedCar){
+return;
+}
 
-    document.getElementById(
-        "chatTitle"
-    ).textContent =
-        "💬 "+
-        selectedCar.name;
+document.getElementById(
+"chatTitle"
+).textContent =
+"💬 " + selectedCar.name;
 
-    document.getElementById(
-        "chatMessages"
-    ).innerHTML=`
+document.getElementById(
+"chatMessages"
+).innerHTML = `
 
 <div class="message seller">
 
@@ -2032,7 +1945,7 @@ function openChat(){
 
 <br><br>
 
-Цена:
+Цена сейчас:
 ${money(selectedPrice)}.
 
 </div>
@@ -2046,71 +1959,56 @@ ${money(selectedPrice)}.
 
 `;
 
-    closeModal(
-        "carModal"
-    );
+closeModal("carModal");
 
-    document.getElementById(
-        "chatModal"
-    )
-    .classList
-    .add("show");
+document.getElementById(
+"chatModal"
+).classList.add("show");
 
 }
 
 
-/* =========================================================
-ЧАТ OFFER
-========================================================= */
-
 function sendOffer(){
 
-    if(!selectedCar){
-        return;
-    }
+if(!selectedCar){
+return;
+}
 
-    const value =
-        Number(
-            document.getElementById(
-                "chatOffer"
-            ).value
-        );
+const value =
+Number(
+document.getElementById(
+"chatOffer"
+).value
+);
 
-    if(!value){
+if(!value){
 
-        alert(
-            "Введите сумму."
-        );
+alert("Введите сумму.");
 
-        return;
+return;
 
-    }
+}
 
-    const chat =
-        document.getElementById(
-            "chatMessages"
-        );
+const chat =
+document.getElementById(
+"chatMessages"
+);
 
-    chat.innerHTML += `
+chat.innerHTML += `
 
 <div class="message me">
 
-Предлагаю
-${money(value)}
+Предлагаю ${money(value)}
 
 </div>
 
 `;
 
-    if(
-        value >=
-        selectedCar.sellerMin
-    ){
+if(value >= selectedCar.sellerMin){
 
-        selectedPrice =
-            value;
+selectedPrice = value;
 
-        chat.innerHTML += `
+chat.innerHTML += `
 
 <div class="message seller">
 
@@ -2118,33 +2016,30 @@ ${money(value)}
 
 <br>
 
-За
-${money(value)}
+За ${money(value)}
 договорились 🤝
 
 </div>
 
 `;
 
-    }else{
+}else{
 
-        const counter =
-            Math.round(
-                (
-                    value+
-                    selectedCar.sellerMin
-                )/2/100
-            )*100;
+const counter =
+Math.round(
+(
+value +
+selectedCar.sellerMin
+) / 2 / 100
+) * 100;
 
-        selectedPrice =
-            counter;
+selectedPrice = counter;
 
-        chat.innerHTML += `
+chat.innerHTML += `
 
 <div class="message seller">
 
-Нет,
-дешевле не получится.
+Нет, дешевле не получится.
 
 <br><br>
 
@@ -2155,165 +2050,119 @@ ${money(counter)}.
 
 `;
 
-    }
+}
 
-    document.getElementById(
-        "chatOffer"
-    ).value="";
+document.getElementById(
+"chatOffer"
+).value = "";
 
 }
 
-
-/* =========================================================
-ПРИНЯТЬ СДЕЛКУ
-========================================================= */
 
 function acceptDeal(){
 
-    if(!selectedCar){
-        return;
-    }
+if(!selectedCar){
+return;
+}
 
-    buyCar(
-        selectedPrice
-    );
+buyCar(selectedPrice);
 
 }
 
 
 /* =========================================================
-ПОКУПКА
+   BUY
 ========================================================= */
 
 function buyCar(price){
 
-    if(!player || !selectedCar){
-        return;
-    }
+if(!player || !selectedCar){
+return;
+}
 
-    if(
-        player.balance < price
-    ){
+if(player.balance < price){
 
-        alert(
-            "Недостаточно денег.\n\n"+
-            "Баланс: "+
-            money(player.balance)
-        );
+alert(
+"Недостаточно денег.\n\n" +
+"Баланс: " +
+money(player.balance)
+);
 
-        return;
+return;
 
-    }
+}
 
-    player.balance -=
-        price;
+player.balance -= price;
 
-    player.totalSpent +=
-        price;
+player.totalSpent += price;
 
-    player.garage.push({
+player.garage.push({
 
-        garageId:
-            Date.now()+
-            Math.floor(
-                Math.random()*1000
-            ),
+garageId:
+Date.now(),
 
-        name:
-            selectedCar.name,
+name:
+selectedCar.name,
 
-        image:
-            selectedCar.image,
+image:
+selectedCar.image,
 
-        year:
-            selectedCar.year,
+year:
+selectedCar.year,
 
-        mileage:
-            selectedCar.mileage,
+mileage:
+selectedCar.mileage,
 
-        purchasePrice:
-            price,
+purchasePrice:
+price,
 
-        repair:
-            selectedCar.repair,
+repair:
+selectedCar.repair,
 
-        sell:
-            selectedCar.sell,
+sell:
+selectedCar.sell,
 
-        repaired:false
+repaired:false
 
-    });
+});
 
-    updateStatus();
+updateStatus();
 
-    save();
+save();
 
-    update();
+update();
 
-    closeModal(
-        "carModal"
-    );
+closeModal("carModal");
 
-    closeModal(
-        "chatModal"
-    );
+closeModal("chatModal");
 
-    alert(
-        selectedCar.name+
-        "\n\nКуплена за "+
-        money(price)+
-        "\n\nПотрачено всего: "+
-        money(player.totalSpent)
-    );
+alert(
+selectedCar.name +
+"\n\nКуплена за " +
+money(price) +
+"\n\nВсего потрачено: " +
+money(player.totalSpent) +
+"\n\nСтатус: " +
+player.status
+);
 
 }
 
 
 /* =========================================================
-ИМУЩЕСТВО
-========================================================= */
-
-function calculateProperty(){
-
-    if(!player){
-        return 0;
-    }
-
-    return player.garage.reduce(
-        (sum,car)=>{
-
-            return sum+
-                Number(
-                    car.repaired
-                    ?
-                    car.sell
-                    :
-                    car.purchasePrice
-                );
-
-        },
-        0
-    );
-
-}
-
-
-/* =========================================================
-ГАРАЖ
+   GARAGE
 ========================================================= */
 
 function renderGarage(){
 
-    const box =
-        document.getElementById(
-            "garageCars"
-        );
+const box =
+document.getElementById(
+"garageCars"
+);
 
-    if(
-        !player.garage.length
-    ){
+if(!player.garage.length){
 
-        box.innerHTML=`
+box.innerHTML = `
 
 <div class="empty">
 
@@ -2328,22 +2177,20 @@ function renderGarage(){
 
 `;
 
-        return;
+return;
 
-    }
+}
 
-    box.innerHTML="";
+box.innerHTML = "";
 
-    player.garage.forEach(car=>{
+player.garage.forEach(car=>{
 
-        const element =
-            document.createElement(
-                "div"
-            );
+const element =
+document.createElement("div");
 
-        element.className="car";
+element.className = "car";
 
-        element.innerHTML=`
+element.innerHTML = `
 
 <img
 class="car-image"
@@ -2364,8 +2211,8 @@ ${escapeHtml(car.name)}
 <br>
 
 Пробег:
-${Number(car.mileage).toLocaleString("ru-RU")}
-км
+${Number(car.mileage || 0)
+.toLocaleString("ru-RU")} км
 
 <br>
 
@@ -2377,19 +2224,19 @@ ${money(car.purchasePrice)}
 <div class="market-price">
 
 ${
-    car.repaired
-    ?
-    "✅ Машина отремонтирована"
-    :
-    "🔧 Требуется ремонт"
+car.repaired
+?
+"✅ Машина отремонтирована"
+:
+"🔧 Требуется ремонт"
 }
 
 </div>
 
 ${
-    car.repaired
+car.repaired
 
-    ?
+?
 
 `
 
@@ -2397,14 +2244,13 @@ ${
 class="btn green"
 onclick="sellCar(${car.garageId})">
 
-💰 Продать за
-${money(car.sell)}
+💰 Продать за ${money(car.sell)}
 
 </button>
 
 `
 
-    :
+:
 
 `
 
@@ -2412,8 +2258,7 @@ ${money(car.sell)}
 class="btn"
 onclick="repairCar(${car.garageId})">
 
-🔧 Отремонтировать за
-${money(car.repair)}
+🔧 Отремонтировать за ${money(car.repair)}
 
 </button>
 
@@ -2425,478 +2270,418 @@ ${money(car.repair)}
 
 `;
 
-        box.appendChild(
-            element
-        );
+box.appendChild(element);
 
-    });
+});
 
 }
 
 
 /* =========================================================
-РЕМОНТ
+   REPAIR
 ========================================================= */
 
 function repairCar(id){
 
-    const car =
-        player.garage.find(
-            c=>c.garageId===id
-        );
+const car =
+player.garage.find(
+c=>c.garageId===id
+);
 
-    if(!car){
-        return;
-    }
+if(!car){
+return;
+}
 
-    if(
-        player.balance <
-        car.repair
-    ){
+if(player.balance < car.repair){
 
-        alert(
-            "Недостаточно денег."
-        );
+alert(
+"Недостаточно денег на ремонт."
+);
 
-        return;
+return;
 
-    }
+}
 
-    player.balance -=
-        car.repair;
+player.balance -= car.repair;
 
-    player.totalSpent +=
-        car.repair;
+player.totalSpent += car.repair;
 
-    car.repaired = true;
+car.repaired = true;
 
-    updateStatus();
+updateStatus();
 
-    save();
+save();
 
-    update();
+update();
 
-    alert(
-        "🔧 Ремонт завершён!\n\n"+
-        "Потрачено: "+
-        money(car.repair)
-    );
+alert(
+"🔧 Ремонт завершён!\n\n" +
+"Потрачено: " +
+money(car.repair)
+);
 
 }
 
 
 /* =========================================================
-ПРОДАЖА
+   SELL
 ========================================================= */
 
 function sellCar(id){
 
-    const index =
-        player.garage.findIndex(
-            c=>c.garageId===id
-        );
+const index =
+player.garage.findIndex(
+c=>c.garageId===id
+);
 
-    if(index===-1){
-        return;
-    }
+if(index===-1){
+return;
+}
 
-    const car =
-        player.garage[index];
+const car =
+player.garage[index];
 
-    if(!car.repaired){
+if(!car.repaired){
 
-        alert(
-            "Сначала отремонтируй машину."
-        );
+alert(
+"Сначала отремонтируй машину."
+);
 
-        return;
+return;
 
-    }
+}
 
-    if(
-        !confirm(
-            "Продать "+
-            car.name+
-            " за "+
-            money(car.sell)+
-            "?"
-        )
-    ){
+if(!confirm(
+"Продать " +
+car.name +
+" за " +
+money(car.sell) +
+"?"
+)){
 
-        return;
+return;
 
-    }
+}
 
-    player.balance +=
-        car.sell;
+player.balance += car.sell;
 
-    player.garage.splice(
-        index,
-        1
-    );
+player.garage.splice(index,1);
 
-    save();
+save();
 
-    update();
+update();
 
-    alert(
-        "Продано!\n\n"+
-        car.name+
-        "\n+"+
-        money(car.sell)
-    );
+alert(
+"Продано!\n\n" +
+car.name +
+"\n+" +
+money(car.sell)
+);
 
 }
 
 
 /* =========================================================
-ТЕЛЕФОН
+   PHONE
 ========================================================= */
 
 function randomDigits(count){
 
-    let result="";
+let result = "";
 
-    for(
-        let i=0;
-        i<count;
-        i++
-    ){
+for(let i=0;i<count;i++){
 
-        result +=
-            Math.floor(
-                Math.random()*10
-            );
+result +=
+Math.floor(
+Math.random()*10
+);
 
-    }
+}
 
-    return result;
+return result;
 
 }
 
 
 function buyPhone(){
 
-    if(player.phone){
+if(player.phone){
 
-        alert(
-            "Твой номер:\n"+
-            player.phone
-        );
+alert(
+"Твой номер:\n" +
+player.phone
+);
 
-        return;
+return;
 
-    }
+}
 
-    const price=300;
+const price = 300;
 
-    if(
-        player.balance<price
-    ){
+if(player.balance < price){
 
-        alert(
-            "Недостаточно денег."
-        );
+alert(
+"Недостаточно денег."
+);
 
-        return;
+return;
 
-    }
+}
 
-    player.balance -=
-        price;
+player.balance -= price;
 
-    player.totalSpent +=
-        price;
+player.totalSpent += price;
 
-    if(
-        player.country==="Беларусь"
-    ){
+if(player.country==="Беларусь"){
 
-        player.phone =
-            "+375 "+
-            randomDigits(2)+
-            " "+
-            randomDigits(3)+
-            " "+
-            randomDigits(2);
+player.phone =
+"+375 " +
+randomDigits(2) +
+" " +
+randomDigits(3) +
+" " +
+randomDigits(2);
 
-    }else{
+}else{
 
-        player.phone =
-            "+7 "+
-            randomDigits(3)+
-            " "+
-            randomDigits(3)+
-            "-"+
-            randomDigits(2)+
-            "-"+
-            randomDigits(2);
+player.phone =
+"+7 " +
+randomDigits(3) +
+" " +
+randomDigits(3) +
+"-" +
+randomDigits(2) +
+"-" +
+randomDigits(2);
 
-    }
+}
 
-    updateStatus();
+updateStatus();
 
-    save();
+save();
 
-    update();
+update();
 
-    alert(
-        "📱 Номер куплен!\n\n"+
-        player.phone
-    );
+alert(
+"📱 Номер куплен!\n\n" +
+player.phone
+);
 
 }
 
 
 /* =========================================================
-ЛИДЕРБОРД SUPABASE
+   LEADERBOARD FROM SUPABASE
 ========================================================= */
 
 async function getLeaderboardPlayers(){
 
-    if(!supabaseClient){
+try{
 
-        return[];
+const {data,error} =
+await supabase
+.from("players")
+.select(
+"id,name,country,balance,total_spent,total_property,status,status_level,updated_at"
+)
+.order(
+"balance",
+{
+ascending:false
+}
+)
+.limit(100);
 
-    }
+if(error){
 
-    try{
+console.error(
+"Leaderboard error:",
+error
+);
 
-        const {data,error} =
-            await supabaseClient
-            .from("players")
-            .select(
-                "id,name,country,balance,total_spent,total_property,status,status_level"
-            )
-            .limit(1000);
+return [];
 
-        if(error){
+}
 
-            console.error(
-                "Leaderboard:",
-                error
-            );
+return data || [];
 
-            return[];
+}catch(error){
 
-        }
+console.error(error);
 
-        return data || [];
+return [];
 
-    }catch(error){
-
-        console.error(
-            "Leaderboard:",
-            error
-        );
-
-        return[];
-
-    }
+}
 
 }
 
 
 /* =========================================================
-ТИП ЛИДЕРОВ
+   LEADERBOARD
 ========================================================= */
 
 function setLeaderType(type){
 
-    leaderType=type;
+leaderType = type;
 
-    document
-    .querySelectorAll(
-        ".leader-tab"
-    )
-    .forEach(
-        el=>
-        el.classList.remove(
-            "active"
-        )
-    );
+document
+.querySelectorAll(".leader-tab")
+.forEach(
+button =>
+button.classList.remove("active")
+);
 
-    if(type==="money"){
+if(type==="money"){
 
-        document
-        .getElementById(
-            "tabMoney"
-        )
-        .classList
-        .add("active");
+document
+.getElementById("tabMoney")
+.classList.add("active");
 
-    }
+}
 
-    if(type==="property"){
+if(type==="property"){
 
-        document
-        .getElementById(
-            "tabProperty"
-        )
-        .classList
-        .add("active");
+document
+.getElementById("tabProperty")
+.classList.add("active");
 
-    }
+}
 
-    if(type==="status"){
+if(type==="status"){
 
-        document
-        .getElementById(
-            "tabStatus"
-        )
-        .classList
-        .add("active");
+document
+.getElementById("tabStatus")
+.classList.add("active");
 
-    }
+}
 
-    renderLeaderboard();
+renderLeaderboard();
 
 }
 
 
-/* =========================================================
-РЕНДЕР ЛИДЕРОВ
-========================================================= */
-
 async function renderLeaderboard(){
 
-    const box =
-        document.getElementById(
-            "leaderList"
-        );
+const box =
+document.getElementById(
+"leaderList"
+);
 
-    box.innerHTML=`
+box.innerHTML = `
 
 <div class="empty">
-⏳ Загружаем игроков...
+Загрузка игроков...
 </div>
 
 `;
 
-    let players =
-        await getLeaderboardPlayers();
+let players =
+await getLeaderboardPlayers();
 
-    if(!players.length){
+if(leaderType==="money"){
 
-        box.innerHTML=`
+players.sort(
+(a,b)=>
+Number(b.balance || 0) -
+Number(a.balance || 0)
+);
+
+}
+
+if(leaderType==="property"){
+
+players.sort(
+(a,b)=>
+Number(b.total_property || 0) -
+Number(a.total_property || 0)
+);
+
+}
+
+if(leaderType==="status"){
+
+players.sort(
+(a,b)=>
+Number(b.status_level || 0) -
+Number(a.status_level || 0) ||
+Number(b.total_spent || 0) -
+Number(a.total_spent || 0)
+);
+
+}
+
+if(!players.length){
+
+box.innerHTML = `
 
 <div class="empty">
 
-Пока игроков нет
-или Supabase ещё не подключён.
+Пока игроков нет.
+
+<br><br>
+
+Зарегистрируй первого игрока.
 
 </div>
 
 `;
 
-        return;
+return;
 
-    }
+}
 
-    if(
-        leaderType==="money"
-    ){
+box.innerHTML = "";
 
-        players.sort(
-            (a,b)=>
-                Number(b.balance||0)-
-                Number(a.balance||0)
-        );
+players.slice(0,50).forEach(
+(playerData,index)=>{
 
-    }
+let value = "";
 
-    if(
-        leaderType==="property"
-    ){
+if(leaderType==="money"){
 
-        players.sort(
-            (a,b)=>
-                Number(b.total_property||0)-
-                Number(a.total_property||0)
-        );
+value =
+money(playerData.balance);
 
-    }
+}
 
-    if(
-        leaderType==="status"
-    ){
+if(leaderType==="property"){
 
-        players.sort(
-            (a,b)=>
-                Number(b.status_level||0)-
-                Number(a.status_level||0)
-                ||
-                Number(b.total_spent||0)-
-                Number(a.total_spent||0)
-        );
+value =
+money(playerData.total_property);
 
-    }
+}
 
-    box.innerHTML="";
+if(leaderType==="status"){
 
-    players
-    .slice(0,100)
-    .forEach(
-        (p,index)=>{
+value =
+escapeHtml(
+playerData.status || "Базовый"
+);
 
-            let medal =
-                String(index+1);
+}
 
-            if(index===0){
-                medal="🥇";
-            }
+let medal;
 
-            if(index===1){
-                medal="🥈";
-            }
+if(index===0){
+medal="🥇";
+}
+else if(index===1){
+medal="🥈";
+}
+else if(index===2){
+medal="🥉";
+}
+else{
+medal=String(index+1);
+}
 
-            if(index===2){
-                medal="🥉";
-            }
+const element =
+document.createElement("div");
 
-            let value="";
+element.className =
+"leader-item";
 
-            if(
-                leaderType==="money"
-            ){
-
-                value =
-                    money(p.balance);
-
-            }
-
-            if(
-                leaderType==="property"
-            ){
-
-                value =
-                    money(
-                        p.total_property
-                    );
-
-            }
-
-            if(
-                leaderType==="status"
-            ){
-
-                value =
-                    escapeHtml(
-                        p.status ||
-                        "Базовый"
-                    );
-
-            }
-
-            const element =
-                document.createElement(
-                    "div"
-                );
-
-            element.className =
-                "leader-item";
-
-            element.innerHTML=`
+element.innerHTML = `
 
 <div class="leader-place">
 ${medal}
@@ -2905,756 +2690,779 @@ ${medal}
 <div>
 
 <div class="leader-name">
+
 ${escapeHtml(
-    p.name ||
-    "Игрок"
+playerData.name || "Игрок"
 )}
+
 </div>
 
 <div class="leader-id">
+
 ${escapeHtml(
-    p.id
+playerData.id
 )}
+
 </div>
 
 <div class="leader-status">
+
 ${escapeHtml(
-    p.status ||
-    "Базовый"
+playerData.status || "Базовый"
 )}
+
 </div>
 
 </div>
 
 <div class="leader-value">
+
 ${value}
+
 </div>
 
 `;
 
-            box.appendChild(
-                element
-            );
+box.appendChild(element);
 
-        }
-    );
+});
 
 }
 
 
 /* =========================================================
-HTML ESCAPE
+   REALTIME LEADERBOARD
+========================================================= */
+
+function startRealtime(){
+
+if(leaderboardChannel){
+return;
+}
+
+leaderboardChannel =
+supabase
+.channel("players-leaderboard")
+.on(
+"postgres_changes",
+{
+event:"*",
+schema:"public",
+table:"players"
+},
+(payload)=>{
+
+console.log(
+"Leaderboard update:",
+payload.eventType
+);
+
+renderLeaderboard();
+
+}
+)
+.subscribe(
+(status)=>{
+
+console.log(
+"Realtime status:",
+status
+);
+
+}
+);
+
+}
+
+
+/* =========================================================
+   ESCAPE
 ========================================================= */
 
 function escapeHtml(text){
 
-    return String(
-        text ?? ""
-    )
-    .replaceAll(
-        "&",
-        "&amp;"
-    )
-    .replaceAll(
-        "<",
-        "&lt;"
-    )
-    .replaceAll(
-        ">",
-        "&gt;"
-    )
-    .replaceAll(
-        '"',
-        "&quot;"
-    )
-    .replaceAll(
-        "'",
-        "&#039;"
-    );
+return String(text ?? "")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
 
 }
 
 
 /* =========================================================
-MODER
+   MODER LOGIN
 ========================================================= */
+
+/*
+   ВАЖНО:
+   Пароль находится в HTML только потому,
+   что это простая версия игры.
+   Для настоящей защиты Moder нужно перенести
+   проверку на Supabase Edge Function.
+*/
 
 function openModerLogin(){
 
-    document
-    .getElementById(
-        "moderLoginModal"
-    )
-    .classList
-    .add("show");
+document
+.getElementById("moderLoginModal")
+.classList.add("show");
 
 }
 
 
 function moderLogin(){
 
-    const password =
-        document
-        .getElementById(
-            "moderPassword"
-        )
-        .value;
+const password =
+document
+.getElementById("moderPassword")
+.value;
 
-    if(
-        password!=="ShumAuto"
-    ){
+if(password !== "ShumAuto"){
 
-        alert(
-            "❌ Неверный пароль."
-        );
+alert(
+"❌ Неверный пароль."
+);
 
-        return;
+return;
 
-    }
+}
 
-    document
-    .getElementById(
-        "moderPassword"
-    )
-    .value="";
+document
+.getElementById("moderPassword")
+.value = "";
 
-    closeModal(
-        "moderLoginModal"
-    );
+closeModal(
+"moderLoginModal"
+);
 
-    document
-    .getElementById(
-        "moderModal"
-    )
-    .classList
-    .add("show");
+document
+.getElementById("moderModal")
+.classList.add("show");
 
 }
 
 
 /* =========================================================
-MODER ID
+   MODER ID
 ========================================================= */
 
 function askModerId(){
 
-    const id =
-        prompt(
-            "Введите ID игрока:\n\n"+
-            "Например:\n"+
-            "A0001AA"
-        );
+const id =
+prompt(
+"Введите ID игрока:\n\nНапример:\nA0001AA"
+);
 
-    if(!id){
-        return null;
-    }
+if(!id){
+return null;
+}
 
-    const clean =
-        id
-        .trim()
-        .toUpperCase();
+const cleanId =
+id
+.trim()
+.toUpperCase();
 
-    if(
-        !/^A\d{4}AA$/.test(
-            clean
-        )
-    ){
+if(!/^A\d{4}AA$/.test(cleanId)){
 
-        alert(
-            "❌ Неверный формат ID.\n\n"+
-            "Пример: A0001AA"
-        );
+alert(
+"❌ Неверный формат ID.\n\n" +
+"Пример: A0001AA"
+);
 
-        return null;
+return null;
 
-    }
+}
 
-    return clean;
+return cleanId;
 
 }
 
 
 /* =========================================================
-НАЙТИ ИГРОКА В SUPABASE
+   FIND PLAYER IN SUPABASE
 ========================================================= */
 
-async function getModerTarget(id){
+async function getPlayerById(id){
 
-    if(!supabaseClient){
+try{
 
-        alert(
-            "Supabase не подключён."
-        );
+const {data,error} =
+await supabase
+.from("players")
+.select("*")
+.eq("id",id)
+.maybeSingle();
 
-        return null;
+if(error){
 
-    }
+console.error(error);
 
-    const {data,error} =
-        await supabaseClient
-        .from("players")
-        .select("*")
-        .eq("id",id)
-        .maybeSingle();
+return null;
 
-    if(error){
+}
 
-        console.error(error);
+return data;
 
-        alert(
-            "Ошибка поиска игрока."
-        );
+}catch(error){
 
-        return null;
+console.error(error);
 
-    }
+return null;
 
-    if(!data){
-
-        alert(
-            "❌ Игрок с ID "+
-            id+
-            " не найден."
-        );
-
-        return null;
-
-    }
-
-    return data;
+}
 
 }
 
 
 /* =========================================================
-MODER MONEY
+   UPDATE REMOTE PLAYER
+========================================================= */
+
+async function updateRemotePlayer(
+remote
+){
+
+const {error} =
+await supabase
+.from("players")
+.update({
+
+balance:
+Number(remote.balance) || 0,
+
+total_spent:
+Number(remote.total_spent) || 0,
+
+total_property:
+Number(remote.total_property) || 0,
+
+status:
+remote.status || "Базовый",
+
+status_level:
+Number(remote.status_level) || 0,
+
+phone:
+remote.phone || null,
+
+garage:
+Array.isArray(remote.garage)
+? remote.garage
+:[],
+
+updated_at:
+new Date().toISOString()
+
+})
+.eq(
+"id",
+remote.id
+);
+
+return !error;
+
+}
+
+
+/* =========================================================
+   GIVE MONEY
 ========================================================= */
 
 async function giveMoney(amount){
 
-    const targetId =
-        askModerId();
+const targetId =
+askModerId();
 
-    if(!targetId){
-        return;
-    }
+if(!targetId){
+return;
+}
 
-    const target =
-        await getModerTarget(
-            targetId
-        );
+const remote =
+await getPlayerById(
+targetId
+);
 
-    if(!target){
-        return;
-    }
+if(!remote){
 
-    const newBalance =
-        Number(
-            target.balance || 0
-        )+
-        amount;
+alert(
+"❌ Игрок с таким ID не найден в Supabase."
+);
 
-    const {error} =
-        await supabaseClient
-        .from("players")
-        .update({
-            balance:newBalance
-        })
-        .eq(
-            "id",
-            targetId
-        );
+return;
 
-    if(error){
+}
 
-        alert(
-            "Ошибка выдачи денег."
-        );
+remote.balance =
+Number(remote.balance || 0) +
+amount;
 
-        console.error(error);
+remote.status =
+getStatus(
+Number(remote.total_spent || 0)
+).name;
 
-        return;
+remote.status_level =
+getStatus(
+Number(remote.total_spent || 0)
+).level;
 
-    }
+const ok =
+await updateRemotePlayer(
+remote
+);
 
-    if(
-        targetId===
-        player.id
-    ){
+if(!ok){
 
-        player.balance =
-            newBalance;
+alert(
+"❌ Не удалось изменить игрока."
+);
 
-        saveLocal();
+return;
 
-        update();
+}
 
-    }
+if(targetId===player.id){
 
-    alert(
-        "✅ Выдано "+
-        money(amount)+
-        "\n\nИгрок: "+
-        targetId
-    );
+player.balance =
+remote.balance;
+
+update();
+
+}
+
+alert(
+"✅ Выдано " +
+money(amount) +
+"\n\nИгрок: " +
+targetId
+);
+
+renderLeaderboard();
 
 }
 
 
 /* =========================================================
-ОБНУЛЕНИЕ
+   RESET BALANCE
 ========================================================= */
 
 async function resetBalance(){
 
-    const targetId =
-        askModerId();
+const targetId =
+askModerId();
 
-    if(!targetId){
-        return;
-    }
+if(!targetId){
+return;
+}
 
-    const target =
-        await getModerTarget(
-            targetId
-        );
+const remote =
+await getPlayerById(
+targetId
+);
 
-    if(!target){
-        return;
-    }
+if(!remote){
 
-    if(
-        !confirm(
-            "⚠️ Обнулить баланс игрока "+
-            targetId+
-            "?"
-        )
-    ){
+alert(
+"❌ Игрок не найден."
+);
 
-        return;
+return;
 
-    }
+}
 
-    const {error} =
-        await supabaseClient
-        .from("players")
-        .update({
-            balance:0
-        })
-        .eq(
-            "id",
-            targetId
-        );
+if(!confirm(
+"⚠️ Обнулить баланс игрока " +
+targetId +
+"?\n\nБаланс станет €0."
+)){
 
-    if(error){
+return;
 
-        alert(
-            "Ошибка."
-        );
+}
 
-        return;
+remote.balance = 0;
 
-    }
+const ok =
+await updateRemotePlayer(
+remote
+);
 
-    if(
-        targetId===
-        player.id
-    ){
+if(!ok){
 
-        player.balance=0;
+alert(
+"❌ Ошибка обновления."
+);
 
-        saveLocal();
+return;
 
-        update();
+}
 
-    }
+if(targetId===player.id){
 
-    alert(
-        "✅ Баланс игрока "+
-        targetId+
-        " обнулён."
-    );
+player.balance = 0;
+
+saveLocal();
+
+update();
+
+}
+
+alert(
+"✅ Баланс игрока " +
+targetId +
+" обнулён."
+);
+
+renderLeaderboard();
 
 }
 
 
 /* =========================================================
-MODER CAR
+   MODER CAR
 ========================================================= */
 
 async function moderCar(){
 
-    const targetId =
-        askModerId();
+const targetId =
+askModerId();
 
-    if(!targetId){
-        return;
-    }
+if(!targetId){
+return;
+}
 
-    const target =
-        await getModerTarget(
-            targetId
-        );
+const remote =
+await getPlayerById(
+targetId
+);
 
-    if(!target){
-        return;
-    }
+if(!remote){
 
-    let text =
-        "🚗 ВЫБЕРИ МАШИНУ\n\n";
+alert(
+"❌ Игрок не найден."
+);
 
-    cars.forEach(
-        (car,index)=>{
+return;
 
-            text +=
-                (index+1)+
-                ". "+
-                car.name+
-                "\n";
+}
 
-        }
-    );
+let text =
+"🚗 ВЫБЕРИ МАШИНУ\n\n";
 
-    const answer =
-        prompt(text);
+cars.forEach(
+(car,index)=>{
 
-    const index =
-        Number(answer)-1;
+text +=
+(index+1) +
+". " +
+car.name +
+"\n";
 
-    if(
-        isNaN(index) ||
-        !cars[index]
-    ){
+});
 
-        alert(
-            "❌ Неверный номер."
-        );
+const answer =
+prompt(text);
 
-        return;
+const index =
+Number(answer)-1;
 
-    }
+if(
+isNaN(index) ||
+!cars[index]
+){
 
-    const car =
-        cars[index];
+alert(
+"❌ Неверный номер."
+);
 
-    const garage =
-        Array.isArray(
-            target.garage
-        )
-        ?
-        target.garage
-        :
-        [];
+return;
 
-    garage.push({
+}
 
-        garageId:
-            Date.now()+
-            Math.floor(
-                Math.random()*10000
-            ),
+const car =
+cars[index];
 
-        name:
-            car.name,
+if(!Array.isArray(remote.garage)){
+remote.garage=[];
+}
 
-        image:
-            car.image,
+remote.garage.push({
 
-        year:2025,
+garageId:
+Date.now(),
 
-        mileage:0,
+name:
+car.name,
 
-        purchasePrice:0,
+image:
+car.image,
 
-        repair:0,
+year:
+2025,
 
-        sell:car.sell,
+mileage:
+0,
 
-        repaired:true
+purchasePrice:
+0,
 
-    });
+repair:
+0,
 
-    const {error} =
-        await supabaseClient
-        .from("players")
-        .update({
-            garage:garage
-        })
-        .eq(
-            "id",
-            targetId
-        );
+sell:
+car.sell,
 
-    if(error){
+repaired:true
 
-        alert(
-            "Ошибка выдачи машины."
-        );
+});
 
-        console.error(error);
+remote.total_property =
+remote.garage.reduce(
+(sum,item)=>
+sum +
+Number(
+item.repaired
+? item.sell
+: item.purchasePrice
+),
+0
+);
 
-        return;
+const ok =
+await updateRemotePlayer(
+remote
+);
 
-    }
+if(!ok){
 
-    if(
-        targetId===
-        player.id
-    ){
+alert(
+"❌ Ошибка выдачи машины."
+);
 
-        player.garage =
-            garage;
+return;
 
-        saveLocal();
+}
 
-        update();
+if(targetId===player.id){
 
-    }
+player.garage =
+remote.garage;
 
-    alert(
-        "🚗 Машина выдана:\n\n"+
-        car.name+
-        "\n\nИгрок: "+
-        targetId
-    );
+update();
+
+}
+
+alert(
+"🚗 Машина выдана:\n\n" +
+car.name +
+"\n\nИгрок: " +
+targetId
+);
+
+renderLeaderboard();
 
 }
 
 
 /* =========================================================
-MODER PHONE
+   MODER PHONE
 ========================================================= */
 
 async function moderPhone(){
 
-    const targetId =
-        askModerId();
+const targetId =
+askModerId();
 
-    if(!targetId){
-        return;
-    }
+if(!targetId){
+return;
+}
 
-    const target =
-        await getModerTarget(
-            targetId
-        );
+const remote =
+await getPlayerById(
+targetId
+);
 
-    if(!target){
-        return;
-    }
+if(!remote){
 
-    let phone;
+alert(
+"❌ Игрок не найден."
+);
 
-    if(
-        target.country==="Беларусь"
-    ){
+return;
 
-        phone =
-            "+375 "+
-            randomDigits(2)+
-            " "+
-            randomDigits(3)+
-            " "+
-            randomDigits(2);
+}
 
-    }else{
+let phone;
 
-        phone =
-            "+7 "+
-            randomDigits(3)+
-            " "+
-            randomDigits(3)+
-            "-"+
-            randomDigits(2)+
-            "-"+
-            randomDigits(2);
+if(remote.country==="Беларусь"){
 
-    }
+phone =
+"+375 " +
+randomDigits(2) +
+" " +
+randomDigits(3) +
+" " +
+randomDigits(2);
 
-    const {error} =
-        await supabaseClient
-        .from("players")
-        .update({
-            phone:phone
-        })
-        .eq(
-            "id",
-            targetId
-        );
+}else{
 
-    if(error){
+phone =
+"+7 " +
+randomDigits(3) +
+" " +
+randomDigits(3) +
+"-" +
+randomDigits(2) +
+"-" +
+randomDigits(2);
 
-        alert(
-            "Ошибка выдачи номера."
-        );
+}
 
-        return;
+remote.phone = phone;
 
-    }
+const ok =
+await updateRemotePlayer(
+remote
+);
 
-    if(
-        targetId===
-        player.id
-    ){
+if(!ok){
 
-        player.phone =
-            phone;
+alert(
+"❌ Ошибка выдачи номера."
+);
 
-        saveLocal();
+return;
 
-        update();
+}
 
-    }
+if(targetId===player.id){
 
-    alert(
-        "📱 Номер выдан:\n\n"+
-        phone
-    );
+player.phone = phone;
+
+update();
+
+}
+
+alert(
+"📱 Номер выдан:\n\n" +
+phone
+);
 
 }
 
 
 /* =========================================================
-VIP PHONE
+   VIP PHONE
 ========================================================= */
 
 async function giveMyVipPhone(){
 
-    const phone =
-        "+375 29 290 29";
+player.phone =
+"+375 29 290 29";
 
-    player.phone =
-        phone;
+save();
 
-    save();
+update();
 
-    update();
-
-    alert(
-        "👑 VIP-номер установлен!\n\n"+
-        phone
-    );
+alert(
+"👑 VIP-номер установлен!\n\n" +
+"+375 29 290 29"
+);
 
 }
 
 
 /* =========================================================
-НАВИГАЦИЯ
+   NAVIGATION
 ========================================================= */
 
-function showPage(
-    id,
-    button
-){
+function showPage(id,button){
 
-    document
-    .querySelectorAll(
-        ".page"
-    )
-    .forEach(
-        page=>
-        page.classList.remove(
-            "active"
-        )
-    );
+document
+.querySelectorAll(".page")
+.forEach(
+page =>
+page.classList.remove("active")
+);
 
-    document
-    .getElementById(id)
-    .classList
-    .add("active");
+document
+.getElementById(id)
+.classList.add("active");
 
-    document
-    .querySelectorAll(
-        ".nav"
-    )
-    .forEach(
-        nav=>
-        nav.classList.remove(
-            "active"
-        )
-    );
+document
+.querySelectorAll(".nav")
+.forEach(
+nav =>
+nav.classList.remove("active")
+);
 
-    button.classList.add(
-        "active"
-    );
+button.classList.add("active");
 
-    if(
-        id==="leaderPage"
-    ){
+if(id==="leaderPage"){
 
-        renderLeaderboard();
+renderLeaderboard();
 
-    }
+}
 
-    window.scrollTo(
-        0,
-        0
-    );
+window.scrollTo(0,0);
 
 }
 
 
 /* =========================================================
-CLOSE
+   CLOSE MODAL
 ========================================================= */
 
 function closeModal(id){
 
-    const modal =
-        document.getElementById(
-            id
-        );
+const modal =
+document.getElementById(id);
 
-    if(modal){
+if(modal){
 
-        modal.classList.remove(
-            "show"
-        );
+modal.classList.remove("show");
 
-    }
+}
 
 }
 
 
 /* =========================================================
-STATUS PROGRESS
+   STATUS PROGRESS
 ========================================================= */
 
 function renderStatusProgress(){
 
-    const spent =
-        player.totalSpent;
+const spent =
+Number(player.totalSpent || 0);
 
-    const current =
-        getStatus(spent);
+const current =
+getStatus(spent);
 
-    let next=null;
+let next = null;
 
-    for(
-        const status of STATUS_LEVELS
-    ){
+for(const status of STATUS_LEVELS){
 
-        if(
-            status.spent >
-            spent
-        ){
+if(status.spent > spent){
 
-            next=status;
+next = status;
 
-            break;
+break;
 
-        }
+}
 
-    }
+}
 
-    const box =
-        document.getElementById(
-            "statusProgress"
-        );
+const box =
+document.getElementById(
+"statusProgress"
+);
 
-    if(!next){
+if(!next){
 
-        box.innerHTML=`
+box.innerHTML = `
 
 👑 <b>VIP достигнут!</b>
 
@@ -3669,20 +3477,18 @@ function renderStatusProgress(){
 
 `;
 
-    }else{
+}else{
 
-        const remaining =
-            next.spent-spent;
+const remaining =
+next.spent - spent;
 
-        const progress =
-            Math.min(
-                100,
-                spent/
-                next.spent*
-                100
-            );
+const progress =
+Math.min(
+100,
+(spent / next.spent) * 100
+);
 
-        box.innerHTML=`
+box.innerHTML = `
 
 Текущий статус:
 <b>${current.name}</b>
@@ -3711,222 +3517,165 @@ ${money(next.spent)}
 
 `;
 
-    }
+}
 
-    document
-    .querySelectorAll(
-        ".status-item"
-    )
-    .forEach(
-        el=>
-        el.classList.remove(
-            "current"
-        )
-    );
+document
+.querySelectorAll(".status-item")
+.forEach(
+el =>
+el.classList.remove("current")
+);
 
-    if(current.level===0){
+const ids = [
+"statusBasic",
+"statusNormal",
+"statusMedium",
+"statusVip"
+];
 
-        document
-        .getElementById(
-            "statusBasic"
-        )
-        .classList
-        .add("current");
+if(ids[current.level]){
 
-    }
+document
+.getElementById(ids[current.level])
+.classList.add("current");
 
-    if(current.level===1){
-
-        document
-        .getElementById(
-            "statusNormal"
-        )
-        .classList
-        .add("current");
-
-    }
-
-    if(current.level===2){
-
-        document
-        .getElementById(
-            "statusMedium"
-        )
-        .classList
-        .add("current");
-
-    }
-
-    if(current.level===3){
-
-        document
-        .getElementById(
-            "statusVip"
-        )
-        .classList
-        .add("current");
-
-    }
+}
 
 }
 
 
 /* =========================================================
-UPDATE
+   UPDATE
 ========================================================= */
 
 function update(){
 
-    if(!player){
-        return;
-    }
+if(!player){
+return;
+}
 
-    updateStatus();
+updateStatus();
 
-    document.getElementById(
-        "balance"
-    ).textContent =
-        money(player.balance);
+document.getElementById(
+"balance"
+).textContent =
+money(player.balance);
 
-    document.getElementById(
-        "headerStatus"
-    ).textContent =
-        player.status;
+document.getElementById(
+"headerStatus"
+).textContent =
+player.status;
 
-    document.getElementById(
-        "profileName"
-    ).textContent =
-        player.name;
+document.getElementById(
+"profileName"
+).textContent =
+player.name;
 
-    document.getElementById(
-        "profileId"
-    ).textContent =
-        player.id;
+document.getElementById(
+"profileId"
+).textContent =
+player.id;
 
-    document.getElementById(
-        "profileCountry"
-    ).textContent =
-        player.country;
+document.getElementById(
+"profileCountry"
+).textContent =
+player.country;
 
-    document.getElementById(
-        "profileStatus"
-    ).textContent =
-        player.status;
+document.getElementById(
+"profileStatus"
+).textContent =
+player.status;
 
-    document.getElementById(
-        "profileSpent"
-    ).textContent =
-        money(
-            player.totalSpent
-        );
+document.getElementById(
+"profileSpent"
+).textContent =
+money(player.totalSpent);
 
-    document.getElementById(
-        "profileProperty"
-    ).textContent =
-        money(
-            calculateProperty()
-        );
+document.getElementById(
+"profileProperty"
+).textContent =
+money(calculateProperty());
 
-    document.getElementById(
-        "profilePhone"
-    ).textContent =
-        player.phone ||
-        "Не куплен";
+document.getElementById(
+"profilePhone"
+).textContent =
+player.phone ||
+"Не куплен";
 
-    renderStatusProgress();
+renderStatusProgress();
 
-    renderMarket();
+renderMarket();
 
-    renderGarage();
+renderGarage();
 
 }
 
 
 /* =========================================================
-ЗАПУСК
+   LOAD PLAYER
 ========================================================= */
 
 async function startGame(){
 
-    await initSupabase();
+player =
+loadLocal();
 
-    player =
-        loadPlayer();
+if(player){
 
-    if(player){
+closeModal(
+"registerModal"
+);
 
-        closeModal(
-            "registerModal"
-        );
+update();
 
-        update();
+await saveToSupabase();
 
-        savePlayerToSupabase();
+}else{
 
-    }else{
+document
+.getElementById("registerModal")
+.classList.add("show");
 
-        document
-        .getElementById(
-            "registerModal"
-        )
-        .classList
-        .add("show");
+}
 
-    }
+startRealtime();
 
-    updateTimer();
+renderLeaderboard();
 
 }
 
 
 /* =========================================================
-АВТООБНОВЛЕНИЕ
+   START
 ========================================================= */
 
+updateTimer();
+
 setInterval(
-    updateTimer,
-    1000
+updateTimer,
+1000
 );
 
 setInterval(
-    ()=>{
+()=>{
 
-        if(player){
+if(player){
 
-            savePlayerToSupabase();
+saveLocal();
 
-        }
+saveToSupabase();
 
-    },
-    10000
-);
+}
 
-setInterval(
-    ()=>{
-
-        const leaderPage =
-            document.getElementById(
-                "leaderPage"
-            );
-
-        if(
-            leaderPage &&
-            leaderPage.classList.contains(
-                "active"
-            )
-        ){
-
-            renderLeaderboard();
-
-        }
-
-    },
-    15000
+},
+10000
 );
 
 window.addEventListener(
-    "beforeunload",
-    saveLocal
+"beforeunload",
+()=>{
+saveLocal();
+}
 );
 
 startGame();
